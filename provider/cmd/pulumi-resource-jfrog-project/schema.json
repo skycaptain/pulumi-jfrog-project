@@ -1,0 +1,840 @@
+{
+    "name": "jfrog-project",
+    "description": "A Pulumi package for creating and managing JFrog Projects.",
+    "keywords": [
+        "pulumi",
+        "jfrog-project",
+        "jfrog-platform"
+    ],
+    "homepage": "https://jfrog.com",
+    "license": "Apache-2.0",
+    "attribution": "This Pulumi package is based on the [`project` Terraform Provider](https://github.com/jfrog/terraform-provider-project).",
+    "repository": "https://github.com/skycaptain/pulumi-jfrog-project",
+    "publisher": "abc",
+    "meta": {
+        "moduleFormat": "(.*)(?:/[^/]*)"
+    },
+    "language": {
+        "csharp": {
+            "packageReferences": {
+                "Pulumi": "3.*"
+            },
+            "compatibility": "tfbridge20"
+        },
+        "go": {
+            "importBasePath": "github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project",
+            "generateResourceContainerTypes": true,
+            "generateExtraInputTypes": true
+        },
+        "nodejs": {
+            "packageDescription": "A Pulumi package for creating and managing JFrog Projects.",
+            "readme": "\u003e This provider is a derived work of the [Terraform Provider](https://github.com/jfrog/terraform-provider-project)\n\u003e distributed under [MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/). If you encounter a bug or missing feature,\n\u003e first check the [`pulumi-jfrog-project` repo](https://github.com/skycaptain/pulumi-jfrog-project/issues); however, if that doesn't turn up anything,\n\u003e please consult the source [`terraform-provider-project` repo](https://github.com/jfrog/terraform-provider-project/issues).",
+            "dependencies": {
+                "@pulumi/pulumi": "^3.0.0"
+            },
+            "devDependencies": {
+                "@types/mime": "^2.0.0",
+                "@types/node": "^10.0.0"
+            },
+            "compatibility": "tfbridge20",
+            "disableUnionOutputTypes": true
+        },
+        "python": {
+            "requires": {
+                "pulumi": "\u003e=3.0.0,\u003c4.0.0",
+                "setuptools": "\u003e=70.1.1"
+            },
+            "readme": "\u003e This provider is a derived work of the [Terraform Provider](https://github.com/jfrog/terraform-provider-project)\n\u003e distributed under [MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/). If you encounter a bug or missing feature,\n\u003e first check the [`pulumi-jfrog-project` repo](https://github.com/skycaptain/pulumi-jfrog-project/issues); however, if that doesn't turn up anything,\n\u003e please consult the source [`terraform-provider-project` repo](https://github.com/jfrog/terraform-provider-project/issues).",
+            "compatibility": "tfbridge20",
+            "pyproject": {}
+        }
+    },
+    "config": {
+        "variables": {
+            "accessToken": {
+                "type": "string",
+                "description": "This is a Bearer token that can be given to you by your admin under `Identity and Access`. This can also be sourced from\nthe `PROJECT_ACCESS_TOKEN` or `JFROG_ACCESS_TOKEN` environment variable. Defauult to empty string if not set.\n",
+                "defaultInfo": {
+                    "environment": [
+                        "PROJECT_ACCESS_TOKEN",
+                        "JFROG_ACCESS_TOKEN"
+                    ]
+                },
+                "secret": true
+            },
+            "checkLicense": {
+                "type": "boolean",
+                "description": "Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.\n",
+                "default": false
+            },
+            "oidcProviderName": {
+                "type": "string",
+                "description": "OIDC provider name. See [Configure an OIDC\nIntegration](https://jfrog.com/help/r/jfrog-platform-administration-documentation/configure-an-oidc-integration) for\nmore details.\n"
+            },
+            "url": {
+                "type": "string",
+                "description": "URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to\n'http://localhost:8081' if not set.\n",
+                "default": "http://localhost:8081",
+                "defaultInfo": {
+                    "environment": [
+                        "PROJECT_URL",
+                        "JFROG_URL",
+                        "JFROG_PLATFORM_URL"
+                    ]
+                }
+            }
+        }
+    },
+    "types": {
+        "jfrog-project:index/ProjectAdminPrivilege:ProjectAdminPrivilege": {
+            "properties": {
+                "indexResources": {
+                    "type": "boolean",
+                    "description": "Enables a project admin to define the resources to be indexed by Xray\n"
+                },
+                "manageMembers": {
+                    "type": "boolean",
+                    "description": "Allows the Project Admin to manage Platform users/groups as project members with different roles.\n"
+                },
+                "manageResources": {
+                    "type": "boolean",
+                    "description": "Allows the Project Admin to manage resources - repositories, builds and Pipelines resources on the project level.\n"
+                }
+            },
+            "type": "object",
+            "required": [
+                "indexResources",
+                "manageMembers",
+                "manageResources"
+            ]
+        },
+        "jfrog-project:index/ProjectGroup:ProjectGroup": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Must be existing Artifactory group\n"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of pre-defined Project or custom roles\n"
+                }
+            },
+            "type": "object",
+            "required": [
+                "name",
+                "roles"
+            ]
+        },
+        "jfrog-project:index/ProjectMember:ProjectMember": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Must be existing Artifactory user\n"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of pre-defined Project or custom roles\n"
+                }
+            },
+            "type": "object",
+            "required": [
+                "name",
+                "roles"
+            ]
+        },
+        "jfrog-project:index/ProjectRole:ProjectRole": {
+            "properties": {
+                "actions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of pre-defined actions (READ*REPOSITORY, ANNOTATE*REPOSITORY, DEPLOY*CACHE*REPOSITORY, DELETE*OVERWRITE*REPOSITORY, MANAGE*XRAY*MD*REPOSITORY, READ*RELEASE*BUNDLE, ANNOTATE*RELEASE*BUNDLE, CREATE*RELEASE*BUNDLE, DISTRIBUTE*RELEASE*BUNDLE, DELETE*RELEASE*BUNDLE, MANAGE*XRAY*MD*RELEASE*BUNDLE, READ*BUILD, ANNOTATE*BUILD, DEPLOY*BUILD, DELETE*BUILD, MANAGE*XRAY*MD*BUILD, READ*SOURCES*PIPELINE, TRIGGER*PIPELINE, READ*INTEGRATIONS*PIPELINE, READ*POOLS*PIPELINE, MANAGE*INTEGRATIONS*PIPELINE, MANAGE*SOURCES*PIPELINE, MANAGE*POOLS*PIPELINE, TRIGGER*SECURITY, ISSUES*SECURITY, LICENCES*SECURITY, REPORTS*SECURITY, WATCHES*SECURITY, POLICIES*SECURITY, RULES*SECURITY, MANAGE*MEMBERS, MANAGE*RESOURCES)\n"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "environments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "A repository can be available in different environments. Members with roles defined in the set environment will have access to the repository. List of pre-defined environments (DEV, PROD)\n"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of role. Only \"CUSTOM\" is supported\n"
+                }
+            },
+            "type": "object",
+            "required": [
+                "actions",
+                "environments",
+                "name"
+            ]
+        }
+    },
+    "provider": {
+        "description": "The provider type for the project package. By default, resources use package-wide configuration\nsettings, however an explicit `Provider` instance may be created and passed during resource\nconstruction to achieve fine-grained programmatic control over provider settings. See the\n[documentation](https://www.pulumi.com/docs/reference/programming-model/#providers) for more information.\n",
+        "properties": {
+            "accessToken": {
+                "type": "string",
+                "description": "This is a Bearer token that can be given to you by your admin under `Identity and Access`. This can also be sourced from\nthe `PROJECT_ACCESS_TOKEN` or `JFROG_ACCESS_TOKEN` environment variable. Defauult to empty string if not set.\n",
+                "secret": true
+            },
+            "checkLicense": {
+                "type": "boolean",
+                "description": "Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.\n"
+            },
+            "oidcProviderName": {
+                "type": "string",
+                "description": "OIDC provider name. See [Configure an OIDC\nIntegration](https://jfrog.com/help/r/jfrog-platform-administration-documentation/configure-an-oidc-integration) for\nmore details.\n"
+            },
+            "url": {
+                "type": "string",
+                "description": "URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to\n'http://localhost:8081' if not set.\n"
+            }
+        },
+        "inputProperties": {
+            "accessToken": {
+                "type": "string",
+                "description": "This is a Bearer token that can be given to you by your admin under `Identity and Access`. This can also be sourced from\nthe `PROJECT_ACCESS_TOKEN` or `JFROG_ACCESS_TOKEN` environment variable. Defauult to empty string if not set.\n",
+                "defaultInfo": {
+                    "environment": [
+                        "PROJECT_ACCESS_TOKEN",
+                        "JFROG_ACCESS_TOKEN"
+                    ]
+                },
+                "secret": true
+            },
+            "checkLicense": {
+                "type": "boolean",
+                "description": "Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.\n",
+                "default": false
+            },
+            "oidcProviderName": {
+                "type": "string",
+                "description": "OIDC provider name. See [Configure an OIDC\nIntegration](https://jfrog.com/help/r/jfrog-platform-administration-documentation/configure-an-oidc-integration) for\nmore details.\n"
+            },
+            "url": {
+                "type": "string",
+                "description": "URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to\n'http://localhost:8081' if not set.\n",
+                "default": "http://localhost:8081",
+                "defaultInfo": {
+                    "environment": [
+                        "PROJECT_URL",
+                        "JFROG_URL",
+                        "JFROG_PLATFORM_URL"
+                    ]
+                }
+            }
+        }
+    },
+    "resources": {
+        "jfrog-project:index/environment:Environment": {
+            "description": "Creates a new environment for the specified project.\n\n~\u003eThe combined length of `project_key` and `name` (separated by '-') cannot not exceeds 32 characters.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst myenv = new jfrog_project.Environment(\"myenv\", {projectKey: \"myproj\"});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmyenv = jfrog_project.Environment(\"myenv\", project_key=\"myproj\")\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var myenv = new JfrogProject.Environment(\"myenv\", new()\n    {\n        ProjectKey = \"myproj\",\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewEnvironment(ctx, \"myenv\", \u0026jfrogproject.EnvironmentArgs{\n\t\t\tProjectKey: pulumi.String(\"myproj\"),\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.Environment;\nimport com.pulumi.jfrogproject.EnvironmentArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var myenv = new Environment(\"myenv\", EnvironmentArgs.builder()\n            .projectKey(\"myproj\")\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  myenv:\n    type: jfrog-project:Environment\n    properties:\n      projectKey: myproj\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/environment:Environment myenv project_key:environment_name\n```\n\n",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Environment name. Must start with a letter and can contain letters, digits and `-` character.\n"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "Project key for this environment. This field supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter.\n"
+                }
+            },
+            "required": [
+                "name",
+                "projectKey"
+            ],
+            "inputProperties": {
+                "name": {
+                    "type": "string",
+                    "description": "Environment name. Must start with a letter and can contain letters, digits and `-` character.\n"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "Project key for this environment. This field supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter.\n"
+                }
+            },
+            "requiredInputs": [
+                "projectKey"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering Environment resources.\n",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Environment name. Must start with a letter and can contain letters, digits and `-` character.\n"
+                    },
+                    "projectKey": {
+                        "type": "string",
+                        "description": "Project key for this environment. This field supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter.\n"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "jfrog-project:index/group:Group": {
+            "description": "Add a group as project member. Element has one to one mapping with the [JFrog Project Groups API](https://jfrog.com/help/r/jfrog-rest-apis/update-group-in-project). Requires a user assigned with the 'Administer the Platform' role or Project Admin permissions if `admin_privileges.manage_resoures` is enabled.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst mygroup = new jfrog_project.Group(\"mygroup\", {\n    projectKey: \"myproj\",\n    roles: [\"Viewer\"],\n});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmygroup = jfrog_project.Group(\"mygroup\",\n    project_key=\"myproj\",\n    roles=[\"Viewer\"])\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var mygroup = new JfrogProject.Group(\"mygroup\", new()\n    {\n        ProjectKey = \"myproj\",\n        Roles = new[]\n        {\n            \"Viewer\",\n        },\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewGroup(ctx, \"mygroup\", \u0026jfrogproject.GroupArgs{\n\t\t\tProjectKey: pulumi.String(\"myproj\"),\n\t\t\tRoles: pulumi.StringArray{\n\t\t\t\tpulumi.String(\"Viewer\"),\n\t\t\t},\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.Group;\nimport com.pulumi.jfrogproject.GroupArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var mygroup = new Group(\"mygroup\", GroupArgs.builder()\n            .projectKey(\"myproj\")\n            .roles(\"Viewer\")\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  mygroup:\n    type: jfrog-project:Group\n    properties:\n      projectKey: myproj\n      roles:\n        - Viewer\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/group:Group mygroup project_key:groupname\n```\n\n",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of an artifactory group.\n"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "The key of the project to which the group should be assigned to.\n"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of pre-defined Project or custom roles\n"
+                }
+            },
+            "required": [
+                "name",
+                "projectKey",
+                "roles"
+            ],
+            "inputProperties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of an artifactory group.\n"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "The key of the project to which the group should be assigned to.\n"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of pre-defined Project or custom roles\n"
+                }
+            },
+            "requiredInputs": [
+                "projectKey",
+                "roles"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering Group resources.\n",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "The name of an artifactory group.\n"
+                    },
+                    "projectKey": {
+                        "type": "string",
+                        "description": "The key of the project to which the group should be assigned to.\n"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "List of pre-defined Project or custom roles\n"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "jfrog-project:index/project:Project": {
+            "description": "Provides an Artifactory project resource. This can be used to create and manage Artifactory project, maintain users/groups/roles/repos.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst myproject = new jfrog_project.Project(\"myproject\", {\n    adminPrivileges: [{\n        indexResources: true,\n        manageMembers: true,\n        manageResources: true,\n    }],\n    blockDeploymentsOnLimit: false,\n    description: \"My Project\",\n    displayName: \"My Project\",\n    emailNotification: true,\n    key: \"myproj\",\n    maxStorageInGibibytes: 10,\n});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmyproject = jfrog_project.Project(\"myproject\",\n    admin_privileges=[jfrog_project.ProjectAdminPrivilegeArgs(\n        index_resources=True,\n        manage_members=True,\n        manage_resources=True,\n    )],\n    block_deployments_on_limit=False,\n    description=\"My Project\",\n    display_name=\"My Project\",\n    email_notification=True,\n    key=\"myproj\",\n    max_storage_in_gibibytes=10)\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var myproject = new JfrogProject.Project(\"myproject\", new()\n    {\n        AdminPrivileges = new[]\n        {\n            new JfrogProject.Inputs.ProjectAdminPrivilegeArgs\n            {\n                IndexResources = true,\n                ManageMembers = true,\n                ManageResources = true,\n            },\n        },\n        BlockDeploymentsOnLimit = false,\n        Description = \"My Project\",\n        DisplayName = \"My Project\",\n        EmailNotification = true,\n        Key = \"myproj\",\n        MaxStorageInGibibytes = 10,\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewProject(ctx, \"myproject\", \u0026jfrogproject.ProjectArgs{\n\t\t\tAdminPrivileges: jfrogproject.ProjectAdminPrivilegeArray{\n\t\t\t\t\u0026jfrogproject.ProjectAdminPrivilegeArgs{\n\t\t\t\t\tIndexResources:  pulumi.Bool(true),\n\t\t\t\t\tManageMembers:   pulumi.Bool(true),\n\t\t\t\t\tManageResources: pulumi.Bool(true),\n\t\t\t\t},\n\t\t\t},\n\t\t\tBlockDeploymentsOnLimit: pulumi.Bool(false),\n\t\t\tDescription:             pulumi.String(\"My Project\"),\n\t\t\tDisplayName:             pulumi.String(\"My Project\"),\n\t\t\tEmailNotification:       pulumi.Bool(true),\n\t\t\tKey:                     pulumi.String(\"myproj\"),\n\t\t\tMaxStorageInGibibytes:   pulumi.Int(10),\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.Project;\nimport com.pulumi.jfrogproject.ProjectArgs;\nimport com.pulumi.jfrogproject.inputs.ProjectAdminPrivilegeArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var myproject = new Project(\"myproject\", ProjectArgs.builder()\n            .adminPrivileges(ProjectAdminPrivilegeArgs.builder()\n                .indexResources(true)\n                .manageMembers(true)\n                .manageResources(true)\n                .build())\n            .blockDeploymentsOnLimit(false)\n            .description(\"My Project\")\n            .displayName(\"My Project\")\n            .emailNotification(true)\n            .key(\"myproj\")\n            .maxStorageInGibibytes(10)\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  myproject:\n    type: jfrog-project:Project\n    properties:\n      adminPrivileges:\n        - indexResources: true\n          manageMembers: true\n          manageResources: true\n      blockDeploymentsOnLimit: false\n      description: My Project\n      displayName: My Project\n      emailNotification: true\n      key: myproj\n      maxStorageInGibibytes: 10\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/project:Project myproject myproj\n```\n\n",
+            "properties": {
+                "adminPrivileges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/types/jfrog-project:index/ProjectAdminPrivilege:ProjectAdminPrivilege"
+                    }
+                },
+                "blockDeploymentsOnLimit": {
+                    "type": "boolean",
+                    "description": "Block deployment of artifacts if storage quota is exceeded.\n"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "displayName": {
+                    "type": "string",
+                    "description": "Also known as project name on the UI\n"
+                },
+                "emailNotification": {
+                    "type": "boolean",
+                    "description": "Alerts will be sent when reaching 75% and 95% of the storage quota. This serves as a notification only and is not a\nblocker\n"
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/types/jfrog-project:index/ProjectGroup:ProjectGroup"
+                    },
+                    "description": "Project group. Element has one to one mapping with the [JFrog Project Groups\nAPI](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateGroupinProject)\n",
+                    "deprecationMessage": "Replaced by `jfrog-project.Group` resource. This should not be used in combination with `jfrog-project.Group` resource. Use `use_project_group_resource` attribute to control which resource manages project roles."
+                },
+                "key": {
+                    "type": "string",
+                    "description": "The Project Key is added as a prefix to resources created within a Project. This field is mandatory and supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter. For example: `us1a-test`.\n"
+                },
+                "maxStorageInGibibytes": {
+                    "type": "integer",
+                    "description": "Storage quota in GiB. Must be 1 or larger. Set to -1 for unlimited storage. This is translated to binary bytes for\nArtifactory API. So for a 1TB quota, this should be set to 1024 (vs 1000) which will translate to 1099511627776 bytes\nfor the API.\n"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/types/jfrog-project:index/ProjectMember:ProjectMember"
+                    },
+                    "description": "Member of the project. Element has one to one mapping with the [JFrog Project Users\nAPI](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateUserinProject).\n",
+                    "deprecationMessage": "Replaced by `jfrog-project.User` resource. This should not be used in combination with `jfrog-project.User` resource. Use `use_project_user_resource` attribute to control which resource manages project roles."
+                },
+                "repos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "(Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this\nattribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute\nin each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use\n`lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {\nignore_changes = [ repos ] } ```\n",
+                    "deprecationMessage": "Replaced by `jfrog-project.Repository` resource. This should not be used in combination with `jfrog-project.Repository` resource. Use `use_project_repository_resource` attribute to control which resource manages project repositories."
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/types/jfrog-project:index/ProjectRole:ProjectRole"
+                    },
+                    "description": "Project role. Element has one to one mapping with the [JFrog Project Roles\nAPI](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-AddaNewRole)\n",
+                    "deprecationMessage": "Replaced by `jfrog-project.Role` resource. This should not be used in combination with `jfrog-project.Role` resource. Use `use_project_role_resource` attribute to control which resource manages project roles."
+                },
+                "useProjectGroupResource": {
+                    "type": "boolean",
+                    "description": "When set to true, this resource will ignore the `group` attributes and allow users to be managed by\n`jfrog-project.Group` resource instead. Default to `true`.\n"
+                },
+                "useProjectRepositoryResource": {
+                    "type": "boolean",
+                    "description": "When set to true, this resource will ignore the `repos` attributes and allow repository to be managed by\n`jfrog-project.Repository` resource instead. Default to `true`.\n"
+                },
+                "useProjectRoleResource": {
+                    "type": "boolean",
+                    "description": "When set to true, this resource will ignore the `roles` attributes and allow roles to be managed by `jfrog-project.Role`\nresource instead. Default to `true`.\n"
+                },
+                "useProjectUserResource": {
+                    "type": "boolean",
+                    "description": "When set to true, this resource will ignore the `member` attributes and allow users to be managed by\n`jfrog-project.User` resource instead. Default to `true`.\n"
+                }
+            },
+            "required": [
+                "blockDeploymentsOnLimit",
+                "displayName",
+                "emailNotification",
+                "key",
+                "maxStorageInGibibytes",
+                "useProjectGroupResource",
+                "useProjectRepositoryResource",
+                "useProjectRoleResource",
+                "useProjectUserResource"
+            ],
+            "inputProperties": {
+                "adminPrivileges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/types/jfrog-project:index/ProjectAdminPrivilege:ProjectAdminPrivilege"
+                    }
+                },
+                "blockDeploymentsOnLimit": {
+                    "type": "boolean",
+                    "description": "Block deployment of artifacts if storage quota is exceeded.\n"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "displayName": {
+                    "type": "string",
+                    "description": "Also known as project name on the UI\n"
+                },
+                "emailNotification": {
+                    "type": "boolean",
+                    "description": "Alerts will be sent when reaching 75% and 95% of the storage quota. This serves as a notification only and is not a\nblocker\n"
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/types/jfrog-project:index/ProjectGroup:ProjectGroup"
+                    },
+                    "description": "Project group. Element has one to one mapping with the [JFrog Project Groups\nAPI](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateGroupinProject)\n",
+                    "deprecationMessage": "Replaced by `jfrog-project.Group` resource. This should not be used in combination with `jfrog-project.Group` resource. Use `use_project_group_resource` attribute to control which resource manages project roles."
+                },
+                "key": {
+                    "type": "string",
+                    "description": "The Project Key is added as a prefix to resources created within a Project. This field is mandatory and supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter. For example: `us1a-test`.\n"
+                },
+                "maxStorageInGibibytes": {
+                    "type": "integer",
+                    "description": "Storage quota in GiB. Must be 1 or larger. Set to -1 for unlimited storage. This is translated to binary bytes for\nArtifactory API. So for a 1TB quota, this should be set to 1024 (vs 1000) which will translate to 1099511627776 bytes\nfor the API.\n"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/types/jfrog-project:index/ProjectMember:ProjectMember"
+                    },
+                    "description": "Member of the project. Element has one to one mapping with the [JFrog Project Users\nAPI](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateUserinProject).\n",
+                    "deprecationMessage": "Replaced by `jfrog-project.User` resource. This should not be used in combination with `jfrog-project.User` resource. Use `use_project_user_resource` attribute to control which resource manages project roles."
+                },
+                "repos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "(Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this\nattribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute\nin each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use\n`lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {\nignore_changes = [ repos ] } ```\n",
+                    "deprecationMessage": "Replaced by `jfrog-project.Repository` resource. This should not be used in combination with `jfrog-project.Repository` resource. Use `use_project_repository_resource` attribute to control which resource manages project repositories."
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/types/jfrog-project:index/ProjectRole:ProjectRole"
+                    },
+                    "description": "Project role. Element has one to one mapping with the [JFrog Project Roles\nAPI](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-AddaNewRole)\n",
+                    "deprecationMessage": "Replaced by `jfrog-project.Role` resource. This should not be used in combination with `jfrog-project.Role` resource. Use `use_project_role_resource` attribute to control which resource manages project roles."
+                },
+                "useProjectGroupResource": {
+                    "type": "boolean",
+                    "description": "When set to true, this resource will ignore the `group` attributes and allow users to be managed by\n`jfrog-project.Group` resource instead. Default to `true`.\n"
+                },
+                "useProjectRepositoryResource": {
+                    "type": "boolean",
+                    "description": "When set to true, this resource will ignore the `repos` attributes and allow repository to be managed by\n`jfrog-project.Repository` resource instead. Default to `true`.\n"
+                },
+                "useProjectRoleResource": {
+                    "type": "boolean",
+                    "description": "When set to true, this resource will ignore the `roles` attributes and allow roles to be managed by `jfrog-project.Role`\nresource instead. Default to `true`.\n"
+                },
+                "useProjectUserResource": {
+                    "type": "boolean",
+                    "description": "When set to true, this resource will ignore the `member` attributes and allow users to be managed by\n`jfrog-project.User` resource instead. Default to `true`.\n"
+                }
+            },
+            "requiredInputs": [
+                "displayName",
+                "key"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering Project resources.\n",
+                "properties": {
+                    "adminPrivileges": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/types/jfrog-project:index/ProjectAdminPrivilege:ProjectAdminPrivilege"
+                        }
+                    },
+                    "blockDeploymentsOnLimit": {
+                        "type": "boolean",
+                        "description": "Block deployment of artifacts if storage quota is exceeded.\n"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Also known as project name on the UI\n"
+                    },
+                    "emailNotification": {
+                        "type": "boolean",
+                        "description": "Alerts will be sent when reaching 75% and 95% of the storage quota. This serves as a notification only and is not a\nblocker\n"
+                    },
+                    "groups": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/types/jfrog-project:index/ProjectGroup:ProjectGroup"
+                        },
+                        "description": "Project group. Element has one to one mapping with the [JFrog Project Groups\nAPI](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateGroupinProject)\n",
+                        "deprecationMessage": "Replaced by `jfrog-project.Group` resource. This should not be used in combination with `jfrog-project.Group` resource. Use `use_project_group_resource` attribute to control which resource manages project roles."
+                    },
+                    "key": {
+                        "type": "string",
+                        "description": "The Project Key is added as a prefix to resources created within a Project. This field is mandatory and supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter. For example: `us1a-test`.\n"
+                    },
+                    "maxStorageInGibibytes": {
+                        "type": "integer",
+                        "description": "Storage quota in GiB. Must be 1 or larger. Set to -1 for unlimited storage. This is translated to binary bytes for\nArtifactory API. So for a 1TB quota, this should be set to 1024 (vs 1000) which will translate to 1099511627776 bytes\nfor the API.\n"
+                    },
+                    "members": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/types/jfrog-project:index/ProjectMember:ProjectMember"
+                        },
+                        "description": "Member of the project. Element has one to one mapping with the [JFrog Project Users\nAPI](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateUserinProject).\n",
+                        "deprecationMessage": "Replaced by `jfrog-project.User` resource. This should not be used in combination with `jfrog-project.User` resource. Use `use_project_user_resource` attribute to control which resource manages project roles."
+                    },
+                    "repos": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "(Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this\nattribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute\nin each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use\n`lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {\nignore_changes = [ repos ] } ```\n",
+                        "deprecationMessage": "Replaced by `jfrog-project.Repository` resource. This should not be used in combination with `jfrog-project.Repository` resource. Use `use_project_repository_resource` attribute to control which resource manages project repositories."
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/types/jfrog-project:index/ProjectRole:ProjectRole"
+                        },
+                        "description": "Project role. Element has one to one mapping with the [JFrog Project Roles\nAPI](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-AddaNewRole)\n",
+                        "deprecationMessage": "Replaced by `jfrog-project.Role` resource. This should not be used in combination with `jfrog-project.Role` resource. Use `use_project_role_resource` attribute to control which resource manages project roles."
+                    },
+                    "useProjectGroupResource": {
+                        "type": "boolean",
+                        "description": "When set to true, this resource will ignore the `group` attributes and allow users to be managed by\n`jfrog-project.Group` resource instead. Default to `true`.\n"
+                    },
+                    "useProjectRepositoryResource": {
+                        "type": "boolean",
+                        "description": "When set to true, this resource will ignore the `repos` attributes and allow repository to be managed by\n`jfrog-project.Repository` resource instead. Default to `true`.\n"
+                    },
+                    "useProjectRoleResource": {
+                        "type": "boolean",
+                        "description": "When set to true, this resource will ignore the `roles` attributes and allow roles to be managed by `jfrog-project.Role`\nresource instead. Default to `true`.\n"
+                    },
+                    "useProjectUserResource": {
+                        "type": "boolean",
+                        "description": "When set to true, this resource will ignore the `member` attributes and allow users to be managed by\n`jfrog-project.User` resource instead. Default to `true`.\n"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "jfrog-project:index/repository:Repository": {
+            "description": "Assign a repository to a project. Requires a user assigned with the 'Administer the Platform' role or Project Admin permissions if `admin_privileges.manage_resoures` is enabled.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst myprojectrepo = new jfrog_project.Repository(\"myprojectrepo\", {\n    key: \"my-generic-local\",\n    projectKey: \"myproj\",\n});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmyprojectrepo = jfrog_project.Repository(\"myprojectrepo\",\n    key=\"my-generic-local\",\n    project_key=\"myproj\")\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var myprojectrepo = new JfrogProject.Repository(\"myprojectrepo\", new()\n    {\n        Key = \"my-generic-local\",\n        ProjectKey = \"myproj\",\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewRepository(ctx, \"myprojectrepo\", \u0026jfrogproject.RepositoryArgs{\n\t\t\tKey:        pulumi.String(\"my-generic-local\"),\n\t\t\tProjectKey: pulumi.String(\"myproj\"),\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.Repository;\nimport com.pulumi.jfrogproject.RepositoryArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var myprojectrepo = new Repository(\"myprojectrepo\", RepositoryArgs.builder()\n            .key(\"my-generic-local\")\n            .projectKey(\"myproj\")\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  myprojectrepo:\n    type: jfrog-project:Repository\n    properties:\n      key: my-generic-local\n      projectKey: myproj\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/repository:Repository myprojectrepo project_key:repository_key\n```\n\n",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": "The key of the repository.\n"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "The key of the project to which the repository should be assigned to.\n"
+                }
+            },
+            "required": [
+                "key",
+                "projectKey"
+            ],
+            "inputProperties": {
+                "key": {
+                    "type": "string",
+                    "description": "The key of the repository.\n"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "The key of the project to which the repository should be assigned to.\n"
+                }
+            },
+            "requiredInputs": [
+                "key",
+                "projectKey"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering Repository resources.\n",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The key of the repository.\n"
+                    },
+                    "projectKey": {
+                        "type": "string",
+                        "description": "The key of the project to which the repository should be assigned to.\n"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "jfrog-project:index/role:Role": {
+            "description": "Create a project role. Element has one to one mapping with the [JFrog Project Roles API](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-AddaNewRole). Requires a user assigned with the 'Administer the Platform' role or Project Admin permissions if `admin_privileges.manage_resoures` is enabled.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst myrole = new jfrog_project.Role(\"myrole\", {\n    type: \"CUSTOM\",\n    projectKey: project.myproject.key,\n    environments: [\"DEV\"],\n    actions: [\n        \"READ_REPOSITORY\",\n        \"ANNOTATE_REPOSITORY\",\n    ],\n});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmyrole = jfrog_project.Role(\"myrole\",\n    type=\"CUSTOM\",\n    project_key=project[\"myproject\"][\"key\"],\n    environments=[\"DEV\"],\n    actions=[\n        \"READ_REPOSITORY\",\n        \"ANNOTATE_REPOSITORY\",\n    ])\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var myrole = new JfrogProject.Role(\"myrole\", new()\n    {\n        Type = \"CUSTOM\",\n        ProjectKey = project.Myproject.Key,\n        Environments = new[]\n        {\n            \"DEV\",\n        },\n        Actions = new[]\n        {\n            \"READ_REPOSITORY\",\n            \"ANNOTATE_REPOSITORY\",\n        },\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewRole(ctx, \"myrole\", \u0026jfrogproject.RoleArgs{\n\t\t\tType:       pulumi.String(\"CUSTOM\"),\n\t\t\tProjectKey: pulumi.Any(project.Myproject.Key),\n\t\t\tEnvironments: pulumi.StringArray{\n\t\t\t\tpulumi.String(\"DEV\"),\n\t\t\t},\n\t\t\tActions: pulumi.StringArray{\n\t\t\t\tpulumi.String(\"READ_REPOSITORY\"),\n\t\t\t\tpulumi.String(\"ANNOTATE_REPOSITORY\"),\n\t\t\t},\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.Role;\nimport com.pulumi.jfrogproject.RoleArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var myrole = new Role(\"myrole\", RoleArgs.builder()\n            .type(\"CUSTOM\")\n            .projectKey(project.myproject().key())\n            .environments(\"DEV\")\n            .actions(            \n                \"READ_REPOSITORY\",\n                \"ANNOTATE_REPOSITORY\")\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  myrole:\n    type: jfrog-project:Role\n    properties:\n      type: CUSTOM\n      projectKey: ${project.myproject.key}\n      environments:\n        - DEV\n      actions:\n        - READ_REPOSITORY\n        - ANNOTATE_REPOSITORY\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/role:Role myrole project_key:role_name\n```\n\n",
+            "properties": {
+                "actions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of pre-defined actions (READ*REPOSITORY, ANNOTATE*REPOSITORY, DEPLOY*CACHE*REPOSITORY, DELETE*OVERWRITE*REPOSITORY, MANAGE*XRAY*MD*REPOSITORY, READ*RELEASE*BUNDLE, ANNOTATE*RELEASE*BUNDLE, CREATE*RELEASE*BUNDLE, DISTRIBUTE*RELEASE*BUNDLE, DELETE*RELEASE*BUNDLE, MANAGE*XRAY*MD*RELEASE*BUNDLE, READ*BUILD, ANNOTATE*BUILD, DEPLOY*BUILD, DELETE*BUILD, MANAGE*XRAY*MD*BUILD, READ*SOURCES*PIPELINE, TRIGGER*PIPELINE, READ*INTEGRATIONS*PIPELINE, READ*POOLS*PIPELINE, MANAGE*INTEGRATIONS*PIPELINE, MANAGE*SOURCES*PIPELINE, MANAGE*POOLS*PIPELINE, TRIGGER*SECURITY, ISSUES*SECURITY, LICENCES*SECURITY, REPORTS*SECURITY, WATCHES*SECURITY, POLICIES*SECURITY, RULES*SECURITY, MANAGE*MEMBERS, MANAGE*RESOURCES)\n"
+                },
+                "environments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "A repository can be available in different environments. Members with roles defined in the set environment will have access to the repository. List of pre-defined environments (DEV, PROD)\n"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "Project key for this environment. This field supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter.\n"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of role. Only \"CUSTOM\" is supported\n"
+                }
+            },
+            "required": [
+                "actions",
+                "environments",
+                "name",
+                "projectKey",
+                "type"
+            ],
+            "inputProperties": {
+                "actions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of pre-defined actions (READ*REPOSITORY, ANNOTATE*REPOSITORY, DEPLOY*CACHE*REPOSITORY, DELETE*OVERWRITE*REPOSITORY, MANAGE*XRAY*MD*REPOSITORY, READ*RELEASE*BUNDLE, ANNOTATE*RELEASE*BUNDLE, CREATE*RELEASE*BUNDLE, DISTRIBUTE*RELEASE*BUNDLE, DELETE*RELEASE*BUNDLE, MANAGE*XRAY*MD*RELEASE*BUNDLE, READ*BUILD, ANNOTATE*BUILD, DEPLOY*BUILD, DELETE*BUILD, MANAGE*XRAY*MD*BUILD, READ*SOURCES*PIPELINE, TRIGGER*PIPELINE, READ*INTEGRATIONS*PIPELINE, READ*POOLS*PIPELINE, MANAGE*INTEGRATIONS*PIPELINE, MANAGE*SOURCES*PIPELINE, MANAGE*POOLS*PIPELINE, TRIGGER*SECURITY, ISSUES*SECURITY, LICENCES*SECURITY, REPORTS*SECURITY, WATCHES*SECURITY, POLICIES*SECURITY, RULES*SECURITY, MANAGE*MEMBERS, MANAGE*RESOURCES)\n"
+                },
+                "environments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "A repository can be available in different environments. Members with roles defined in the set environment will have access to the repository. List of pre-defined environments (DEV, PROD)\n"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "Project key for this environment. This field supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter.\n"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of role. Only \"CUSTOM\" is supported\n"
+                }
+            },
+            "requiredInputs": [
+                "actions",
+                "environments",
+                "projectKey",
+                "type"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering Role resources.\n",
+                "properties": {
+                    "actions": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "List of pre-defined actions (READ*REPOSITORY, ANNOTATE*REPOSITORY, DEPLOY*CACHE*REPOSITORY, DELETE*OVERWRITE*REPOSITORY, MANAGE*XRAY*MD*REPOSITORY, READ*RELEASE*BUNDLE, ANNOTATE*RELEASE*BUNDLE, CREATE*RELEASE*BUNDLE, DISTRIBUTE*RELEASE*BUNDLE, DELETE*RELEASE*BUNDLE, MANAGE*XRAY*MD*RELEASE*BUNDLE, READ*BUILD, ANNOTATE*BUILD, DEPLOY*BUILD, DELETE*BUILD, MANAGE*XRAY*MD*BUILD, READ*SOURCES*PIPELINE, TRIGGER*PIPELINE, READ*INTEGRATIONS*PIPELINE, READ*POOLS*PIPELINE, MANAGE*INTEGRATIONS*PIPELINE, MANAGE*SOURCES*PIPELINE, MANAGE*POOLS*PIPELINE, TRIGGER*SECURITY, ISSUES*SECURITY, LICENCES*SECURITY, REPORTS*SECURITY, WATCHES*SECURITY, POLICIES*SECURITY, RULES*SECURITY, MANAGE*MEMBERS, MANAGE*RESOURCES)\n"
+                    },
+                    "environments": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "A repository can be available in different environments. Members with roles defined in the set environment will have access to the repository. List of pre-defined environments (DEV, PROD)\n"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "projectKey": {
+                        "type": "string",
+                        "description": "Project key for this environment. This field supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter.\n"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Type of role. Only \"CUSTOM\" is supported\n"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "jfrog-project:index/user:User": {
+            "description": "Add a user as project member. Element has one to one mapping with the [JFrog Project Users API](https://jfrog.com/help/r/jfrog-rest-apis/add-or-update-user-in-project). Requires a user assigned with the 'Administer the Platform' role or Project Admin permissions if `admin_privileges.manage_resoures` is enabled.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst myuser = new jfrog_project.User(\"myuser\", {\n    projectKey: \"myproj\",\n    roles: [\"Viewer\"],\n});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmyuser = jfrog_project.User(\"myuser\",\n    project_key=\"myproj\",\n    roles=[\"Viewer\"])\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var myuser = new JfrogProject.User(\"myuser\", new()\n    {\n        ProjectKey = \"myproj\",\n        Roles = new[]\n        {\n            \"Viewer\",\n        },\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewUser(ctx, \"myuser\", \u0026jfrogproject.UserArgs{\n\t\t\tProjectKey: pulumi.String(\"myproj\"),\n\t\t\tRoles: pulumi.StringArray{\n\t\t\t\tpulumi.String(\"Viewer\"),\n\t\t\t},\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.User;\nimport com.pulumi.jfrogproject.UserArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var myuser = new User(\"myuser\", UserArgs.builder()\n            .projectKey(\"myproj\")\n            .roles(\"Viewer\")\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  myuser:\n    type: jfrog-project:User\n    properties:\n      projectKey: myproj\n      roles:\n        - Viewer\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/user:User myuser project_key:username\n```\n\n",
+            "properties": {
+                "ignoreMissingUser": {
+                    "type": "boolean",
+                    "description": "When set to `true`, the resource will not fail if the user does not exist. Default to `false`. This is useful when the user is externally managed and the local account wasn't created yet.\n"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of an artifactory user.\n"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "The key of the project to which the user should be assigned to.\n"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of pre-defined Project or custom roles\n"
+                }
+            },
+            "required": [
+                "ignoreMissingUser",
+                "name",
+                "projectKey",
+                "roles"
+            ],
+            "inputProperties": {
+                "ignoreMissingUser": {
+                    "type": "boolean",
+                    "description": "When set to `true`, the resource will not fail if the user does not exist. Default to `false`. This is useful when the user is externally managed and the local account wasn't created yet.\n"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of an artifactory user.\n"
+                },
+                "projectKey": {
+                    "type": "string",
+                    "description": "The key of the project to which the user should be assigned to.\n"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of pre-defined Project or custom roles\n"
+                }
+            },
+            "requiredInputs": [
+                "projectKey",
+                "roles"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering User resources.\n",
+                "properties": {
+                    "ignoreMissingUser": {
+                        "type": "boolean",
+                        "description": "When set to `true`, the resource will not fail if the user does not exist. Default to `false`. This is useful when the user is externally managed and the local account wasn't created yet.\n"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of an artifactory user.\n"
+                    },
+                    "projectKey": {
+                        "type": "string",
+                        "description": "The key of the project to which the user should be assigned to.\n"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "List of pre-defined Project or custom roles\n"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
