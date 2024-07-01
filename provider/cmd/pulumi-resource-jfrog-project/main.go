@@ -15,17 +15,18 @@
 package main
 
 import (
+	"context"
 	_ "embed"
 
-	"github.com/pulumi/pulumi-terraform-bridge/v3/pkg/tfbridge"
-	xyz "github.com/pulumi/pulumi-xyz/provider"
-	"github.com/pulumi/pulumi-xyz/provider/pkg/version"
+	"github.com/pulumi/pulumi-terraform-bridge/pf/tfbridge"
+	jfrog_project "github.com/skycaptain/pulumi-jfrog-project/provider"
 )
 
 //go:embed schema.json
-var pulumiSchema []byte
+var schema []byte
 
 func main() {
 	// Modify the path to point to the new provider
-	tfbridge.Main("xyz", version.Version, xyz.Provider(), pulumiSchema)
+	tfbridge.Main(context.Background(), "jfrog-project", jfrog_project.Provider(),
+		tfbridge.ProviderMetadata{PackageSchema: schema})
 }

@@ -1,9 +1,10 @@
-PROJECT_NAME := xyz Package
+PROJECT_NAME := jfrog-project Package
 
 SHELL            := /bin/bash
-PACK             := xyz
-PROJECT          := github.com/pulumi/pulumi-xyz
-NODE_MODULE_NAME := @abc/${PACK}
+PACK             := jfrog-project
+ORG              := skycaptain
+PROJECT          := github.com/${ORG}/pulumi-${PACK}
+NODE_MODULE_NAME := pulumi-${PACK}
 TF_NAME          := ${PACK}
 PROVIDER_PATH    := provider
 VERSION_PATH     := ${PROVIDER_PATH}/pkg/version.Version

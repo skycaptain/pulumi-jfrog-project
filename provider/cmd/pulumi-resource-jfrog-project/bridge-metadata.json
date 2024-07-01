@@ -1,0 +1,84 @@
+{
+    "auto-aliasing": {
+        "resources": {
+            "project": {
+                "current": "jfrog-project:index/project:Project",
+                "fields": {
+                    "admin_privileges": {
+                        "maxItemsOne": false
+                    },
+                    "group": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "roles": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "member": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "roles": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "repos": {
+                        "maxItemsOne": false
+                    },
+                    "role": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "actions": {
+                                    "maxItemsOne": false
+                                },
+                                "environments": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "project_environment": {
+                "current": "jfrog-project:index/environment:Environment"
+            },
+            "project_group": {
+                "current": "jfrog-project:index/group:Group",
+                "fields": {
+                    "roles": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "project_repository": {
+                "current": "jfrog-project:index/repository:Repository"
+            },
+            "project_role": {
+                "current": "jfrog-project:index/role:Role",
+                "fields": {
+                    "actions": {
+                        "maxItemsOne": false
+                    },
+                    "environments": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "project_user": {
+                "current": "jfrog-project:index/user:User",
+                "fields": {
+                    "roles": {
+                        "maxItemsOne": false
+                    }
+                }
+            }
+        }
+    },
+    "auto-settings": {}
+}

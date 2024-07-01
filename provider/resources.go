@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package xyz
+package provider
 
 import (
 	"path"
@@ -20,27 +20,33 @@ import (
 	// Allow embedding bridge-metadata.json in the provider.
 	_ "embed"
 
+	pfbridge "github.com/pulumi/pulumi-terraform-bridge/pf/tfbridge"
 	"github.com/pulumi/pulumi-terraform-bridge/v3/pkg/tfbridge"
 	"github.com/pulumi/pulumi-terraform-bridge/v3/pkg/tfbridge/tokens"
-	shimv2 "github.com/pulumi/pulumi-terraform-bridge/v3/pkg/tfshim/sdk-v2"
+	shim "github.com/pulumi/pulumi-terraform-bridge/v3/pkg/tfshim"
+	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
 
 	// Replace this provider with the provider you are bridging.
-	xyz "github.com/iwahbe/terraform-provider-xyz/provider"
+	projectProvider "github.com/jfrog/terraform-provider-project/pkg/project/provider"
 
-	"github.com/pulumi/pulumi-xyz/provider/pkg/version"
+	"github.com/skycaptain/pulumi-jfrog-project/provider/pkg/version"
 )
 
 // all of the token components used below.
 const (
 	// This variable controls the default name of the package in the package
 	// registries for nodejs and python:
-	mainPkg = "xyz"
+	mainPkg = "jfrog-project"
 	// modules:
-	mainMod = "index" // the xyz module
+	mainMod = "index" // the jfrog-project module
 )
 
-//go:embed cmd/pulumi-resource-xyz/bridge-metadata.json
+//go:embed cmd/pulumi-resource-jfrog-project/bridge-metadata.json
 var metadata []byte
+
+func boolRef(b bool) *bool {
+	return &b
+}
 
 // Provider returns additional overlaid schema and metadata associated with the provider.
 func Provider() tfbridge.ProviderInfo {
@@ -106,9 +112,9 @@ func Provider() tfbridge.ProviderInfo {
 		// - "github.com/hashicorp/terraform-plugin-framework/provider".Provider (for plugin-framework)
 		//
 		//nolint:lll
-		P: shimv2.NewProvider(xyz.New(version.Version)()),
+		P: pfbridge.ShimProvider(projectProvider.Framework()()),
 
-		Name:    "xyz",
+		Name:    "project",
 		Version: version.Version,
 		// DisplayName is a way to be able to change the casing of the provider name when being
 		// displayed on the Pulumi registry
@@ -126,27 +132,54 @@ func Provider() tfbridge.ProviderInfo {
 		// for use in Pulumi programs
 		// e.g. https://github.com/org/pulumi-provider-name/releases/download/v${VERSION}/
 		PluginDownloadURL: "",
-		Description:       "A Pulumi package for creating and managing xyz cloud resources.",
+		Description:       "A Pulumi package for creating and managing JFrog Projects.",
 		// category/cloud tag helps with categorizing the package in the Pulumi Registry.
 		// For all available categories, see `Keywords` in
 		// https://www.pulumi.com/docs/guides/pulumi-packages/schema/#package.
-		Keywords:   []string{"abc", "xyz", "category/cloud"},
+		Keywords:   []string{"pulumi", "jfrog-project", "jfrog-platform"},
 		License:    "Apache-2.0",
-		Homepage:   "https://www.pulumi.com",
-		Repository: "https://github.com/pulumi/pulumi-xyz",
+		Homepage:   "https://jfrog.com",
+		Repository: "https://github.com/skycaptain/pulumi-jfrog-project",
 		// The GitHub Org for the provider - defaults to `terraform-providers`. Note that this should
 		// match the TF provider module's require directive, not any replace directives.
-		GitHubOrg:    "",
+		GitHubOrg:    "jfrog",
 		MetadataInfo: tfbridge.NewProviderMetadata(metadata),
-		Config:       map[string]*tfbridge.SchemaInfo{
-			// Add any required configuration here, or remove the example below if
-			// no additional points are required.
-			// "region": {
-			// 	Type: tfbridge.MakeType("region", "Region"),
-			// 	Default: &tfbridge.DefaultInfo{
-			// 		EnvVars: []string{"AWS_REGION", "AWS_DEFAULT_REGION"},
-			// 	},
-			// },
+		Config: map[string]*tfbridge.SchemaInfo{
+			"url": {
+				Default: &tfbridge.DefaultInfo{
+					EnvVars: []string{"PROJECT_URL", "JFROG_URL", "JFROG_PLATFORM_URL"},
+					Value:   "http://localhost:8081",
+				},
+			},
+			"access_token": {
+				Default: &tfbridge.DefaultInfo{
+					EnvVars: []string{"PROJECT_ACCESS_TOKEN", "JFROG_ACCESS_TOKEN"},
+				},
+				Secret: boolRef(true),
+			},
+			"check_license": {
+				Default: &tfbridge.DefaultInfo{
+					Value: false,
+				},
+			},
+		},
+		// PreConfigureCallback is called before the providerConfigure function of the underlying
+		// provider. It should validate that the provider can be configured, and provide actionable
+		// errors in the case it cannot be. Configuration variables can be read from `vars` using
+		// the `stringValue` function - for example `stringValue(vars, "accessKey")`.
+		PreConfigureCallback: func(resource.PropertyMap, shim.ResourceConfig) error {
+			return nil
+		},
+		Resources: map[string]*tfbridge.ResourceInfo{
+			// Map each resource in the Terraform provider to a Pulumi type. Two examples
+			// are below - the single line form is the common case. The multi-line form is
+			// needed only if you wish to override types or other default options.
+			"project": {Tok: tfbridge.MakeResource(mainPkg, mainMod, "Project")},
+		},
+		DataSources: map[string]*tfbridge.DataSourceInfo{
+			// Map each resource in the Terraform provider to a Pulumi function. An example
+			// is below.
+			// "aws_ami": {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getAmi")},
 		},
 		JavaScript: &tfbridge.JavaScriptInfo{
 			// List any npm dependencies and their versions
@@ -162,11 +195,13 @@ func Provider() tfbridge.ProviderInfo {
 			// List any Python dependencies and their version ranges
 			Requires: map[string]string{
 				"pulumi": ">=3.0.0,<4.0.0",
+				// setuptools is required as the template imports pkg_resources
+				"setuptools": ">=70.1.1",
 			},
 		},
 		Golang: &tfbridge.GolangInfo{
 			ImportBasePath: path.Join(
-				"github.com/pulumi/pulumi-xyz/sdk/",
+				"github.com/skycaptain/pulumi-jfrog-project/sdk/",
 				tfbridge.GetModuleMajorVersion(version.Version),
 				"go",
 				mainPkg,
@@ -186,7 +221,7 @@ func Provider() tfbridge.ProviderInfo {
 	//
 	// You shouldn't need to override anything, but if you do, use the [tfbridge.ProviderInfo.Resources]
 	// and [tfbridge.ProviderInfo.DataSources].
-	prov.MustComputeTokens(tokens.SingleModule("xyz_", mainMod,
+	prov.MustComputeTokens(tokens.SingleModule("project_", mainMod,
 		tokens.MakeStandard(mainPkg)))
 
 	prov.MustApplyAutoAliases()
