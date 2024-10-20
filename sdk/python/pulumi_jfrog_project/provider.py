@@ -4,9 +4,14 @@
 
 import copy
 import warnings
+import sys
 import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
+if sys.version_info >= (3, 11):
+    from typing import NotRequired, TypedDict, TypeAlias
+else:
+    from typing_extensions import NotRequired, TypedDict, TypeAlias
 from . import _utilities
 
 __all__ = ['ProviderArgs', 'Provider']
@@ -17,6 +22,7 @@ class ProviderArgs:
                  access_token: Optional[pulumi.Input[str]] = None,
                  check_license: Optional[pulumi.Input[bool]] = None,
                  oidc_provider_name: Optional[pulumi.Input[str]] = None,
+                 tfc_credential_tag_name: Optional[pulumi.Input[str]] = None,
                  url: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Provider resource.
@@ -33,12 +39,17 @@ class ProviderArgs:
             access_token = _utilities.get_env('PROJECT_ACCESS_TOKEN', 'JFROG_ACCESS_TOKEN')
         if access_token is not None:
             pulumi.set(__self__, "access_token", access_token)
+        if check_license is not None:
+            warnings.warn("""Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider.""", DeprecationWarning)
+            pulumi.log.warn("""check_license is deprecated: Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider.""")
         if check_license is None:
             check_license = False
         if check_license is not None:
             pulumi.set(__self__, "check_license", check_license)
         if oidc_provider_name is not None:
             pulumi.set(__self__, "oidc_provider_name", oidc_provider_name)
+        if tfc_credential_tag_name is not None:
+            pulumi.set(__self__, "tfc_credential_tag_name", tfc_credential_tag_name)
         if url is None:
             url = (_utilities.get_env('PROJECT_URL', 'JFROG_URL', 'JFROG_PLATFORM_URL') or 'http://localhost:8081')
         if url is not None:
@@ -59,6 +70,7 @@ class ProviderArgs:
 
     @property
     @pulumi.getter(name="checkLicense")
+    @_utilities.deprecated("""Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider.""")
     def check_license(self) -> Optional[pulumi.Input[bool]]:
         """
         Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.
@@ -84,6 +96,15 @@ class ProviderArgs:
         pulumi.set(self, "oidc_provider_name", value)
 
     @property
+    @pulumi.getter(name="tfcCredentialTagName")
+    def tfc_credential_tag_name(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "tfc_credential_tag_name")
+
+    @tfc_credential_tag_name.setter
+    def tfc_credential_tag_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "tfc_credential_tag_name", value)
+
+    @property
     @pulumi.getter
     def url(self) -> Optional[pulumi.Input[str]]:
         """
@@ -105,6 +126,7 @@ class Provider(pulumi.ProviderResource):
                  access_token: Optional[pulumi.Input[str]] = None,
                  check_license: Optional[pulumi.Input[bool]] = None,
                  oidc_provider_name: Optional[pulumi.Input[str]] = None,
+                 tfc_credential_tag_name: Optional[pulumi.Input[str]] = None,
                  url: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
@@ -154,6 +176,7 @@ class Provider(pulumi.ProviderResource):
                  access_token: Optional[pulumi.Input[str]] = None,
                  check_license: Optional[pulumi.Input[bool]] = None,
                  oidc_provider_name: Optional[pulumi.Input[str]] = None,
+                 tfc_credential_tag_name: Optional[pulumi.Input[str]] = None,
                  url: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -171,6 +194,7 @@ class Provider(pulumi.ProviderResource):
                 check_license = False
             __props__.__dict__["check_license"] = pulumi.Output.from_input(check_license).apply(pulumi.runtime.to_json) if check_license is not None else None
             __props__.__dict__["oidc_provider_name"] = oidc_provider_name
+            __props__.__dict__["tfc_credential_tag_name"] = tfc_credential_tag_name
             if url is None:
                 url = (_utilities.get_env('PROJECT_URL', 'JFROG_URL', 'JFROG_PLATFORM_URL') or 'http://localhost:8081')
             __props__.__dict__["url"] = url
@@ -200,6 +224,11 @@ class Provider(pulumi.ProviderResource):
         more details.
         """
         return pulumi.get(self, "oidc_provider_name")
+
+    @property
+    @pulumi.getter(name="tfcCredentialTagName")
+    def tfc_credential_tag_name(self) -> pulumi.Output[Optional[str]]:
+        return pulumi.get(self, "tfc_credential_tag_name")
 
     @property
     @pulumi.getter

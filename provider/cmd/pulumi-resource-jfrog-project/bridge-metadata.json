@@ -70,6 +70,12 @@
                     }
                 }
             },
+            "project_share_repository": {
+                "current": "jfrog-project:index/shareRepository:ShareRepository"
+            },
+            "project_share_repository_with_all": {
+                "current": "jfrog-project:index/shareRepositoryWithAll:ShareRepositoryWithAll"
+            },
             "project_user": {
                 "current": "jfrog-project:index/user:User",
                 "fields": {

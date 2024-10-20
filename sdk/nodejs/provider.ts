@@ -36,6 +36,7 @@ export class Provider extends pulumi.ProviderResource {
      * more details.
      */
     public readonly oidcProviderName!: pulumi.Output<string | undefined>;
+    public readonly tfcCredentialTagName!: pulumi.Output<string | undefined>;
     /**
      * URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to
      * 'http://localhost:8081' if not set.
@@ -56,6 +57,7 @@ export class Provider extends pulumi.ProviderResource {
             resourceInputs["accessToken"] = (args?.accessToken ? pulumi.secret(args.accessToken) : undefined) ?? utilities.getEnv("PROJECT_ACCESS_TOKEN", "JFROG_ACCESS_TOKEN");
             resourceInputs["checkLicense"] = pulumi.output((args ? args.checkLicense : undefined) ?? false).apply(JSON.stringify);
             resourceInputs["oidcProviderName"] = args ? args.oidcProviderName : undefined;
+            resourceInputs["tfcCredentialTagName"] = args ? args.tfcCredentialTagName : undefined;
             resourceInputs["url"] = (args ? args.url : undefined) ?? (utilities.getEnv("PROJECT_URL", "JFROG_URL", "JFROG_PLATFORM_URL") || "http://localhost:8081");
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -76,6 +78,8 @@ export interface ProviderArgs {
     accessToken?: pulumi.Input<string>;
     /**
      * Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.
+     *
+     * @deprecated Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider.
      */
     checkLicense?: pulumi.Input<boolean>;
     /**
@@ -84,6 +88,7 @@ export interface ProviderArgs {
      * more details.
      */
     oidcProviderName?: pulumi.Input<string>;
+    tfcCredentialTagName?: pulumi.Input<string>;
     /**
      * URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to
      * 'http://localhost:8081' if not set.

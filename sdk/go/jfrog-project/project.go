@@ -85,9 +85,8 @@ type Project struct {
 	//
 	// Deprecated: Replaced by `User` resource. This should not be used in combination with `User` resource. Use `useProjectUserResource` attribute to control which resource manages project roles.
 	Members ProjectMemberArrayOutput `pulumi:"members"`
-	// (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-	// attribute to manage the list of repositories. If you wish to use the alternate method of setting `projectKey` attribute
-	// in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+	// (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+	// `projectKey` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
 	// `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
 	// } ```
 	//
@@ -173,9 +172,8 @@ type projectState struct {
 	//
 	// Deprecated: Replaced by `User` resource. This should not be used in combination with `User` resource. Use `useProjectUserResource` attribute to control which resource manages project roles.
 	Members []ProjectMember `pulumi:"members"`
-	// (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-	// attribute to manage the list of repositories. If you wish to use the alternate method of setting `projectKey` attribute
-	// in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+	// (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+	// `projectKey` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
 	// `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
 	// } ```
 	//
@@ -226,9 +224,8 @@ type ProjectState struct {
 	//
 	// Deprecated: Replaced by `User` resource. This should not be used in combination with `User` resource. Use `useProjectUserResource` attribute to control which resource manages project roles.
 	Members ProjectMemberArrayInput
-	// (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-	// attribute to manage the list of repositories. If you wish to use the alternate method of setting `projectKey` attribute
-	// in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+	// (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+	// `projectKey` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
 	// `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
 	// } ```
 	//
@@ -283,9 +280,8 @@ type projectArgs struct {
 	//
 	// Deprecated: Replaced by `User` resource. This should not be used in combination with `User` resource. Use `useProjectUserResource` attribute to control which resource manages project roles.
 	Members []ProjectMember `pulumi:"members"`
-	// (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-	// attribute to manage the list of repositories. If you wish to use the alternate method of setting `projectKey` attribute
-	// in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+	// (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+	// `projectKey` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
 	// `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
 	// } ```
 	//
@@ -337,9 +333,8 @@ type ProjectArgs struct {
 	//
 	// Deprecated: Replaced by `User` resource. This should not be used in combination with `User` resource. Use `useProjectUserResource` attribute to control which resource manages project roles.
 	Members ProjectMemberArrayInput
-	// (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-	// attribute to manage the list of repositories. If you wish to use the alternate method of setting `projectKey` attribute
-	// in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+	// (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+	// `projectKey` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
 	// `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
 	// } ```
 	//
@@ -503,9 +498,8 @@ func (o ProjectOutput) Members() ProjectMemberArrayOutput {
 	return o.ApplyT(func(v *Project) ProjectMemberArrayOutput { return v.Members }).(ProjectMemberArrayOutput)
 }
 
-// (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-// attribute to manage the list of repositories. If you wish to use the alternate method of setting `projectKey` attribute
-// in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+// (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+// `projectKey` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
 // `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
 // } ```
 //

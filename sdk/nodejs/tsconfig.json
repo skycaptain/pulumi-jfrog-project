@@ -22,6 +22,8 @@
         "provider.ts",
         "repository.ts",
         "role.ts",
+        "shareRepository.ts",
+        "shareRepositoryWithAll.ts",
         "types/index.ts",
         "types/input.ts",
         "types/output.ts",

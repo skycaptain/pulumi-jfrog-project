@@ -40,6 +40,7 @@ setup(name='pulumi_jfrog_project',
           'parver>=0.2.1',
           'pulumi>=3.0.0,<4.0.0',
           'semver>=2.8.1',
-          'setuptools>=70.1.1'
+          'setuptools>=70.1.1',
+          'typing-extensions>=4.11,<5; python_version < "3.11"'
       ],
       zip_safe=False)

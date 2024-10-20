@@ -33,6 +33,9 @@ namespace Pulumi.JfrogProject
         [Output("oidcProviderName")]
         public Output<string?> OidcProviderName { get; private set; } = null!;
 
+        [Output("tfcCredentialTagName")]
+        public Output<string?> TfcCredentialTagName { get; private set; } = null!;
+
         /// <summary>
         /// URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to
         /// 'http://localhost:8081' if not set.
@@ -102,6 +105,9 @@ namespace Pulumi.JfrogProject
         /// </summary>
         [Input("oidcProviderName")]
         public Input<string>? OidcProviderName { get; set; }
+
+        [Input("tfcCredentialTagName")]
+        public Input<string>? TfcCredentialTagName { get; set; }
 
         /// <summary>
         /// URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to

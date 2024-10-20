@@ -65,11 +65,15 @@
             "checkLicense": {
                 "type": "boolean",
                 "description": "Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.\n",
-                "default": false
+                "default": false,
+                "deprecationMessage": "Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider."
             },
             "oidcProviderName": {
                 "type": "string",
                 "description": "OIDC provider name. See [Configure an OIDC\nIntegration](https://jfrog.com/help/r/jfrog-platform-administration-documentation/configure-an-oidc-integration) for\nmore details.\n"
+            },
+            "tfcCredentialTagName": {
+                "type": "string"
             },
             "url": {
                 "type": "string",
@@ -193,11 +197,15 @@
             },
             "checkLicense": {
                 "type": "boolean",
-                "description": "Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.\n"
+                "description": "Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.\n",
+                "deprecationMessage": "Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider."
             },
             "oidcProviderName": {
                 "type": "string",
                 "description": "OIDC provider name. See [Configure an OIDC\nIntegration](https://jfrog.com/help/r/jfrog-platform-administration-documentation/configure-an-oidc-integration) for\nmore details.\n"
+            },
+            "tfcCredentialTagName": {
+                "type": "string"
             },
             "url": {
                 "type": "string",
@@ -219,11 +227,15 @@
             "checkLicense": {
                 "type": "boolean",
                 "description": "Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.\n",
-                "default": false
+                "default": false,
+                "deprecationMessage": "Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider."
             },
             "oidcProviderName": {
                 "type": "string",
                 "description": "OIDC provider name. See [Configure an OIDC\nIntegration](https://jfrog.com/help/r/jfrog-platform-administration-documentation/configure-an-oidc-integration) for\nmore details.\n"
+            },
+            "tfcCredentialTagName": {
+                "type": "string"
             },
             "url": {
                 "type": "string",
@@ -352,7 +364,7 @@
             }
         },
         "jfrog-project:index/project:Project": {
-            "description": "Provides an Artifactory project resource. This can be used to create and manage Artifactory project, maintain users/groups/roles/repos.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst myproject = new jfrog_project.Project(\"myproject\", {\n    adminPrivileges: [{\n        indexResources: true,\n        manageMembers: true,\n        manageResources: true,\n    }],\n    blockDeploymentsOnLimit: false,\n    description: \"My Project\",\n    displayName: \"My Project\",\n    emailNotification: true,\n    key: \"myproj\",\n    maxStorageInGibibytes: 10,\n});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmyproject = jfrog_project.Project(\"myproject\",\n    admin_privileges=[jfrog_project.ProjectAdminPrivilegeArgs(\n        index_resources=True,\n        manage_members=True,\n        manage_resources=True,\n    )],\n    block_deployments_on_limit=False,\n    description=\"My Project\",\n    display_name=\"My Project\",\n    email_notification=True,\n    key=\"myproj\",\n    max_storage_in_gibibytes=10)\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var myproject = new JfrogProject.Project(\"myproject\", new()\n    {\n        AdminPrivileges = new[]\n        {\n            new JfrogProject.Inputs.ProjectAdminPrivilegeArgs\n            {\n                IndexResources = true,\n                ManageMembers = true,\n                ManageResources = true,\n            },\n        },\n        BlockDeploymentsOnLimit = false,\n        Description = \"My Project\",\n        DisplayName = \"My Project\",\n        EmailNotification = true,\n        Key = \"myproj\",\n        MaxStorageInGibibytes = 10,\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewProject(ctx, \"myproject\", \u0026jfrogproject.ProjectArgs{\n\t\t\tAdminPrivileges: jfrogproject.ProjectAdminPrivilegeArray{\n\t\t\t\t\u0026jfrogproject.ProjectAdminPrivilegeArgs{\n\t\t\t\t\tIndexResources:  pulumi.Bool(true),\n\t\t\t\t\tManageMembers:   pulumi.Bool(true),\n\t\t\t\t\tManageResources: pulumi.Bool(true),\n\t\t\t\t},\n\t\t\t},\n\t\t\tBlockDeploymentsOnLimit: pulumi.Bool(false),\n\t\t\tDescription:             pulumi.String(\"My Project\"),\n\t\t\tDisplayName:             pulumi.String(\"My Project\"),\n\t\t\tEmailNotification:       pulumi.Bool(true),\n\t\t\tKey:                     pulumi.String(\"myproj\"),\n\t\t\tMaxStorageInGibibytes:   pulumi.Int(10),\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.Project;\nimport com.pulumi.jfrogproject.ProjectArgs;\nimport com.pulumi.jfrogproject.inputs.ProjectAdminPrivilegeArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var myproject = new Project(\"myproject\", ProjectArgs.builder()\n            .adminPrivileges(ProjectAdminPrivilegeArgs.builder()\n                .indexResources(true)\n                .manageMembers(true)\n                .manageResources(true)\n                .build())\n            .blockDeploymentsOnLimit(false)\n            .description(\"My Project\")\n            .displayName(\"My Project\")\n            .emailNotification(true)\n            .key(\"myproj\")\n            .maxStorageInGibibytes(10)\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  myproject:\n    type: jfrog-project:Project\n    properties:\n      adminPrivileges:\n        - indexResources: true\n          manageMembers: true\n          manageResources: true\n      blockDeploymentsOnLimit: false\n      description: My Project\n      displayName: My Project\n      emailNotification: true\n      key: myproj\n      maxStorageInGibibytes: 10\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/project:Project myproject myproj\n```\n\n",
+            "description": "Provides an Artifactory project resource. This can be used to create and manage Artifactory project, maintain users/groups/roles/repos.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst myproject = new jfrog_project.Project(\"myproject\", {\n    adminPrivileges: [{\n        indexResources: true,\n        manageMembers: true,\n        manageResources: true,\n    }],\n    blockDeploymentsOnLimit: false,\n    description: \"My Project\",\n    displayName: \"My Project\",\n    emailNotification: true,\n    key: \"myproj\",\n    maxStorageInGibibytes: 10,\n});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmyproject = jfrog_project.Project(\"myproject\",\n    admin_privileges=[{\n        \"index_resources\": True,\n        \"manage_members\": True,\n        \"manage_resources\": True,\n    }],\n    block_deployments_on_limit=False,\n    description=\"My Project\",\n    display_name=\"My Project\",\n    email_notification=True,\n    key=\"myproj\",\n    max_storage_in_gibibytes=10)\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var myproject = new JfrogProject.Project(\"myproject\", new()\n    {\n        AdminPrivileges = new[]\n        {\n            new JfrogProject.Inputs.ProjectAdminPrivilegeArgs\n            {\n                IndexResources = true,\n                ManageMembers = true,\n                ManageResources = true,\n            },\n        },\n        BlockDeploymentsOnLimit = false,\n        Description = \"My Project\",\n        DisplayName = \"My Project\",\n        EmailNotification = true,\n        Key = \"myproj\",\n        MaxStorageInGibibytes = 10,\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewProject(ctx, \"myproject\", \u0026jfrogproject.ProjectArgs{\n\t\t\tAdminPrivileges: jfrogproject.ProjectAdminPrivilegeArray{\n\t\t\t\t\u0026jfrogproject.ProjectAdminPrivilegeArgs{\n\t\t\t\t\tIndexResources:  pulumi.Bool(true),\n\t\t\t\t\tManageMembers:   pulumi.Bool(true),\n\t\t\t\t\tManageResources: pulumi.Bool(true),\n\t\t\t\t},\n\t\t\t},\n\t\t\tBlockDeploymentsOnLimit: pulumi.Bool(false),\n\t\t\tDescription:             pulumi.String(\"My Project\"),\n\t\t\tDisplayName:             pulumi.String(\"My Project\"),\n\t\t\tEmailNotification:       pulumi.Bool(true),\n\t\t\tKey:                     pulumi.String(\"myproj\"),\n\t\t\tMaxStorageInGibibytes:   pulumi.Int(10),\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.Project;\nimport com.pulumi.jfrogproject.ProjectArgs;\nimport com.pulumi.jfrogproject.inputs.ProjectAdminPrivilegeArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var myproject = new Project(\"myproject\", ProjectArgs.builder()\n            .adminPrivileges(ProjectAdminPrivilegeArgs.builder()\n                .indexResources(true)\n                .manageMembers(true)\n                .manageResources(true)\n                .build())\n            .blockDeploymentsOnLimit(false)\n            .description(\"My Project\")\n            .displayName(\"My Project\")\n            .emailNotification(true)\n            .key(\"myproj\")\n            .maxStorageInGibibytes(10)\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  myproject:\n    type: jfrog-project:Project\n    properties:\n      adminPrivileges:\n        - indexResources: true\n          manageMembers: true\n          manageResources: true\n      blockDeploymentsOnLimit: false\n      description: My Project\n      displayName: My Project\n      emailNotification: true\n      key: myproj\n      maxStorageInGibibytes: 10\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/project:Project myproject myproj\n```\n\n",
             "properties": {
                 "adminPrivileges": {
                     "type": "array",
@@ -404,7 +416,7 @@
                     "items": {
                         "type": "string"
                     },
-                    "description": "(Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this\nattribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute\nin each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use\n`lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {\nignore_changes = [ repos ] } ```\n",
+                    "description": "(Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting\n`project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use\n`lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {\nignore_changes = [ repos ] } ```\n",
                     "deprecationMessage": "Replaced by `jfrog-project.Repository` resource. This should not be used in combination with `jfrog-project.Repository` resource. Use `use_project_repository_resource` attribute to control which resource manages project repositories."
                 },
                 "roles": {
@@ -494,7 +506,7 @@
                     "items": {
                         "type": "string"
                     },
-                    "description": "(Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this\nattribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute\nin each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use\n`lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {\nignore_changes = [ repos ] } ```\n",
+                    "description": "(Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting\n`project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use\n`lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {\nignore_changes = [ repos ] } ```\n",
                     "deprecationMessage": "Replaced by `jfrog-project.Repository` resource. This should not be used in combination with `jfrog-project.Repository` resource. Use `use_project_repository_resource` attribute to control which resource manages project repositories."
                 },
                 "roles": {
@@ -579,7 +591,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "description": "(Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this\nattribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute\nin each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use\n`lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {\nignore_changes = [ repos ] } ```\n",
+                        "description": "(Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting\n`project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use\n`lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {\nignore_changes = [ repos ] } ```\n",
                         "deprecationMessage": "Replaced by `jfrog-project.Repository` resource. This should not be used in combination with `jfrog-project.Repository` resource. Use `use_project_repository_resource` attribute to control which resource manages project repositories."
                     },
                     "roles": {
@@ -751,6 +763,108 @@
                     "type": {
                         "type": "string",
                         "description": "Type of role. Only \"CUSTOM\" is supported\n"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "jfrog-project:index/shareRepository:ShareRepository": {
+            "description": "Share a local or remote repository with a list of projects. Project Members of the target project are granted actions to the shared repository according to their Roles and Role actions assigned in the target Project. Requires a user assigned with the 'Administer the Platform' role.\n\n-\u003eOnly available for Artifactory 7.90.1 or later.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst myprojectsharerepo = new jfrog_project.ShareRepository(\"myprojectsharerepo\", {\n    repoKey: \"myrepo-generic-local\",\n    targetProjectKey: \"myproj\",\n});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmyprojectsharerepo = jfrog_project.ShareRepository(\"myprojectsharerepo\",\n    repo_key=\"myrepo-generic-local\",\n    target_project_key=\"myproj\")\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var myprojectsharerepo = new JfrogProject.ShareRepository(\"myprojectsharerepo\", new()\n    {\n        RepoKey = \"myrepo-generic-local\",\n        TargetProjectKey = \"myproj\",\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewShareRepository(ctx, \"myprojectsharerepo\", \u0026jfrogproject.ShareRepositoryArgs{\n\t\t\tRepoKey:          pulumi.String(\"myrepo-generic-local\"),\n\t\t\tTargetProjectKey: pulumi.String(\"myproj\"),\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.ShareRepository;\nimport com.pulumi.jfrogproject.ShareRepositoryArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var myprojectsharerepo = new ShareRepository(\"myprojectsharerepo\", ShareRepositoryArgs.builder()\n            .repoKey(\"myrepo-generic-local\")\n            .targetProjectKey(\"myproj\")\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  myprojectsharerepo:\n    type: jfrog-project:ShareRepository\n    properties:\n      repoKey: myrepo-generic-local\n      targetProjectKey: myproj\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/shareRepository:ShareRepository myprojectsharerepo repo_key:project_key\n```\n\n",
+            "properties": {
+                "readOnly": {
+                    "type": "boolean",
+                    "description": "Share repository with a Project in Read-Only mode to avoid any changes or modifications of the shared content.\n"
+                },
+                "repoKey": {
+                    "type": "string",
+                    "description": "The key of the repository.\n"
+                },
+                "targetProjectKey": {
+                    "type": "string",
+                    "description": "The project key to which the repository should be shared with.\n"
+                }
+            },
+            "required": [
+                "readOnly",
+                "repoKey",
+                "targetProjectKey"
+            ],
+            "inputProperties": {
+                "readOnly": {
+                    "type": "boolean",
+                    "description": "Share repository with a Project in Read-Only mode to avoid any changes or modifications of the shared content.\n"
+                },
+                "repoKey": {
+                    "type": "string",
+                    "description": "The key of the repository.\n"
+                },
+                "targetProjectKey": {
+                    "type": "string",
+                    "description": "The project key to which the repository should be shared with.\n"
+                }
+            },
+            "requiredInputs": [
+                "repoKey",
+                "targetProjectKey"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering ShareRepository resources.\n",
+                "properties": {
+                    "readOnly": {
+                        "type": "boolean",
+                        "description": "Share repository with a Project in Read-Only mode to avoid any changes or modifications of the shared content.\n"
+                    },
+                    "repoKey": {
+                        "type": "string",
+                        "description": "The key of the repository.\n"
+                    },
+                    "targetProjectKey": {
+                        "type": "string",
+                        "description": "The project key to which the repository should be shared with.\n"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "jfrog-project:index/shareRepositoryWithAll:ShareRepositoryWithAll": {
+            "description": "Share a local or remote repository with all projects. Project Members of the target project are granted actions to the shared repository according to their Roles and Role actions assigned in the target Project. Requires a user assigned with the 'Administer the Platform' role.\n\n-\u003eOnly available for Artifactory 7.90.1 or later.\n\n## Example Usage\n\n\u003c!--Start PulumiCodeChooser --\u003e\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as jfrog_project from \"@pulumi/jfrog-project\";\n\nconst myprojectsharerepo = new jfrog_project.ShareRepositoryWithAll(\"myprojectsharerepo\", {repoKey: \"myrepo-generic-local\"});\n```\n```python\nimport pulumi\nimport pulumi_jfrog_project as jfrog_project\n\nmyprojectsharerepo = jfrog_project.ShareRepositoryWithAll(\"myprojectsharerepo\", repo_key=\"myrepo-generic-local\")\n```\n```csharp\nusing System.Collections.Generic;\nusing System.Linq;\nusing Pulumi;\nusing JfrogProject = Pulumi.JfrogProject;\n\nreturn await Deployment.RunAsync(() =\u003e \n{\n    var myprojectsharerepo = new JfrogProject.ShareRepositoryWithAll(\"myprojectsharerepo\", new()\n    {\n        RepoKey = \"myrepo-generic-local\",\n    });\n\n});\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n\tjfrogproject \"github.com/skycaptain/pulumi-jfrog-project/sdk/go/jfrog-project\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := jfrogproject.NewShareRepositoryWithAll(ctx, \"myprojectsharerepo\", \u0026jfrogproject.ShareRepositoryWithAllArgs{\n\t\t\tRepoKey: pulumi.String(\"myrepo-generic-local\"),\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport com.pulumi.Context;\nimport com.pulumi.Pulumi;\nimport com.pulumi.core.Output;\nimport com.pulumi.jfrogproject.ShareRepositoryWithAll;\nimport com.pulumi.jfrogproject.ShareRepositoryWithAllArgs;\nimport java.util.List;\nimport java.util.ArrayList;\nimport java.util.Map;\nimport java.io.File;\nimport java.nio.file.Files;\nimport java.nio.file.Paths;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var myprojectsharerepo = new ShareRepositoryWithAll(\"myprojectsharerepo\", ShareRepositoryWithAllArgs.builder()\n            .repoKey(\"myrepo-generic-local\")\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  myprojectsharerepo:\n    type: jfrog-project:ShareRepositoryWithAll\n    properties:\n      repoKey: myrepo-generic-local\n```\n\u003c!--End PulumiCodeChooser --\u003e\n\n## Import\n\n```sh\n$ pulumi import jfrog-project:index/shareRepositoryWithAll:ShareRepositoryWithAll myprojectsharerepo repo_key\n```\n\n",
+            "properties": {
+                "readOnly": {
+                    "type": "boolean",
+                    "description": "Share repository with a Project in Read-Only mode to avoid any changes or modifications of the shared content.\n"
+                },
+                "repoKey": {
+                    "type": "string",
+                    "description": "The key of the repository.\n"
+                }
+            },
+            "required": [
+                "readOnly",
+                "repoKey"
+            ],
+            "inputProperties": {
+                "readOnly": {
+                    "type": "boolean",
+                    "description": "Share repository with a Project in Read-Only mode to avoid any changes or modifications of the shared content.\n"
+                },
+                "repoKey": {
+                    "type": "string",
+                    "description": "The key of the repository.\n"
+                }
+            },
+            "requiredInputs": [
+                "repoKey"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering ShareRepositoryWithAll resources.\n",
+                "properties": {
+                    "readOnly": {
+                        "type": "boolean",
+                        "description": "Share repository with a Project in Read-Only mode to avoid any changes or modifications of the shared content.\n"
+                    },
+                    "repoKey": {
+                        "type": "string",
+                        "description": "The key of the repository.\n"
                     }
                 },
                 "type": "object"

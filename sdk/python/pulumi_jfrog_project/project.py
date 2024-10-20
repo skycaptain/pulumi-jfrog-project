@@ -4,9 +4,14 @@
 
 import copy
 import warnings
+import sys
 import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
+if sys.version_info >= (3, 11):
+    from typing import NotRequired, TypedDict, TypeAlias
+else:
+    from typing_extensions import NotRequired, TypedDict, TypeAlias
 from . import _utilities
 from . import outputs
 from ._inputs import *
@@ -45,9 +50,8 @@ class ProjectArgs:
                for the API.
         :param pulumi.Input[Sequence[pulumi.Input['ProjectMemberArgs']]] members: Member of the project. Element has one to one mapping with the [JFrog Project Users
                API](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateUserinProject).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] repos: (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-               attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-               in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] repos: (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+               `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
                `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
                } ```
         :param pulumi.Input[Sequence[pulumi.Input['ProjectRoleArgs']]] roles: Project role. Element has one to one mapping with the [JFrog Project Roles
@@ -216,9 +220,8 @@ class ProjectArgs:
     @_utilities.deprecated("""Replaced by `Repository` resource. This should not be used in combination with `Repository` resource. Use `use_project_repository_resource` attribute to control which resource manages project repositories.""")
     def repos(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-        attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-        in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+        `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
         `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
         } ```
         """
@@ -327,9 +330,8 @@ class _ProjectState:
                for the API.
         :param pulumi.Input[Sequence[pulumi.Input['ProjectMemberArgs']]] members: Member of the project. Element has one to one mapping with the [JFrog Project Users
                API](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateUserinProject).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] repos: (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-               attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-               in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] repos: (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+               `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
                `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
                } ```
         :param pulumi.Input[Sequence[pulumi.Input['ProjectRoleArgs']]] roles: Project role. Element has one to one mapping with the [JFrog Project Roles
@@ -500,9 +502,8 @@ class _ProjectState:
     @_utilities.deprecated("""Replaced by `Repository` resource. This should not be used in combination with `Repository` resource. Use `use_project_repository_resource` attribute to control which resource manages project repositories.""")
     def repos(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-        attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-        in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+        `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
         `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
         } ```
         """
@@ -584,17 +585,17 @@ class Project(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 admin_privileges: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectAdminPrivilegeArgs']]]]] = None,
+                 admin_privileges: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectAdminPrivilegeArgs', 'ProjectAdminPrivilegeArgsDict']]]]] = None,
                  block_deployments_on_limit: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  display_name: Optional[pulumi.Input[str]] = None,
                  email_notification: Optional[pulumi.Input[bool]] = None,
-                 groups: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectGroupArgs']]]]] = None,
+                 groups: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectGroupArgs', 'ProjectGroupArgsDict']]]]] = None,
                  key: Optional[pulumi.Input[str]] = None,
                  max_storage_in_gibibytes: Optional[pulumi.Input[int]] = None,
-                 members: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectMemberArgs']]]]] = None,
+                 members: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectMemberArgs', 'ProjectMemberArgsDict']]]]] = None,
                  repos: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 roles: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectRoleArgs']]]]] = None,
+                 roles: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectRoleArgs', 'ProjectRoleArgsDict']]]]] = None,
                  use_project_group_resource: Optional[pulumi.Input[bool]] = None,
                  use_project_repository_resource: Optional[pulumi.Input[bool]] = None,
                  use_project_role_resource: Optional[pulumi.Input[bool]] = None,
@@ -610,11 +611,11 @@ class Project(pulumi.CustomResource):
         import pulumi_jfrog_project as jfrog_project
 
         myproject = jfrog_project.Project("myproject",
-            admin_privileges=[jfrog_project.ProjectAdminPrivilegeArgs(
-                index_resources=True,
-                manage_members=True,
-                manage_resources=True,
-            )],
+            admin_privileges=[{
+                "index_resources": True,
+                "manage_members": True,
+                "manage_resources": True,
+            }],
             block_deployments_on_limit=False,
             description="My Project",
             display_name="My Project",
@@ -635,20 +636,19 @@ class Project(pulumi.CustomResource):
         :param pulumi.Input[str] display_name: Also known as project name on the UI
         :param pulumi.Input[bool] email_notification: Alerts will be sent when reaching 75% and 95% of the storage quota. This serves as a notification only and is not a
                blocker
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectGroupArgs']]]] groups: Project group. Element has one to one mapping with the [JFrog Project Groups
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ProjectGroupArgs', 'ProjectGroupArgsDict']]]] groups: Project group. Element has one to one mapping with the [JFrog Project Groups
                API](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateGroupinProject)
         :param pulumi.Input[str] key: The Project Key is added as a prefix to resources created within a Project. This field is mandatory and supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter. For example: `us1a-test`.
         :param pulumi.Input[int] max_storage_in_gibibytes: Storage quota in GiB. Must be 1 or larger. Set to -1 for unlimited storage. This is translated to binary bytes for
                Artifactory API. So for a 1TB quota, this should be set to 1024 (vs 1000) which will translate to 1099511627776 bytes
                for the API.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectMemberArgs']]]] members: Member of the project. Element has one to one mapping with the [JFrog Project Users
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ProjectMemberArgs', 'ProjectMemberArgsDict']]]] members: Member of the project. Element has one to one mapping with the [JFrog Project Users
                API](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateUserinProject).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] repos: (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-               attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-               in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] repos: (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+               `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
                `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
                } ```
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectRoleArgs']]]] roles: Project role. Element has one to one mapping with the [JFrog Project Roles
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ProjectRoleArgs', 'ProjectRoleArgsDict']]]] roles: Project role. Element has one to one mapping with the [JFrog Project Roles
                API](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-AddaNewRole)
         :param pulumi.Input[bool] use_project_group_resource: When set to true, this resource will ignore the `group` attributes and allow users to be managed by `Group` resource
                instead. Default to `true`.
@@ -675,11 +675,11 @@ class Project(pulumi.CustomResource):
         import pulumi_jfrog_project as jfrog_project
 
         myproject = jfrog_project.Project("myproject",
-            admin_privileges=[jfrog_project.ProjectAdminPrivilegeArgs(
-                index_resources=True,
-                manage_members=True,
-                manage_resources=True,
-            )],
+            admin_privileges=[{
+                "index_resources": True,
+                "manage_members": True,
+                "manage_resources": True,
+            }],
             block_deployments_on_limit=False,
             description="My Project",
             display_name="My Project",
@@ -709,17 +709,17 @@ class Project(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 admin_privileges: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectAdminPrivilegeArgs']]]]] = None,
+                 admin_privileges: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectAdminPrivilegeArgs', 'ProjectAdminPrivilegeArgsDict']]]]] = None,
                  block_deployments_on_limit: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  display_name: Optional[pulumi.Input[str]] = None,
                  email_notification: Optional[pulumi.Input[bool]] = None,
-                 groups: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectGroupArgs']]]]] = None,
+                 groups: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectGroupArgs', 'ProjectGroupArgsDict']]]]] = None,
                  key: Optional[pulumi.Input[str]] = None,
                  max_storage_in_gibibytes: Optional[pulumi.Input[int]] = None,
-                 members: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectMemberArgs']]]]] = None,
+                 members: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectMemberArgs', 'ProjectMemberArgsDict']]]]] = None,
                  repos: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-                 roles: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectRoleArgs']]]]] = None,
+                 roles: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectRoleArgs', 'ProjectRoleArgsDict']]]]] = None,
                  use_project_group_resource: Optional[pulumi.Input[bool]] = None,
                  use_project_repository_resource: Optional[pulumi.Input[bool]] = None,
                  use_project_role_resource: Optional[pulumi.Input[bool]] = None,
@@ -762,17 +762,17 @@ class Project(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            admin_privileges: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectAdminPrivilegeArgs']]]]] = None,
+            admin_privileges: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectAdminPrivilegeArgs', 'ProjectAdminPrivilegeArgsDict']]]]] = None,
             block_deployments_on_limit: Optional[pulumi.Input[bool]] = None,
             description: Optional[pulumi.Input[str]] = None,
             display_name: Optional[pulumi.Input[str]] = None,
             email_notification: Optional[pulumi.Input[bool]] = None,
-            groups: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectGroupArgs']]]]] = None,
+            groups: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectGroupArgs', 'ProjectGroupArgsDict']]]]] = None,
             key: Optional[pulumi.Input[str]] = None,
             max_storage_in_gibibytes: Optional[pulumi.Input[int]] = None,
-            members: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectMemberArgs']]]]] = None,
+            members: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectMemberArgs', 'ProjectMemberArgsDict']]]]] = None,
             repos: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
-            roles: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectRoleArgs']]]]] = None,
+            roles: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProjectRoleArgs', 'ProjectRoleArgsDict']]]]] = None,
             use_project_group_resource: Optional[pulumi.Input[bool]] = None,
             use_project_repository_resource: Optional[pulumi.Input[bool]] = None,
             use_project_role_resource: Optional[pulumi.Input[bool]] = None,
@@ -788,20 +788,19 @@ class Project(pulumi.CustomResource):
         :param pulumi.Input[str] display_name: Also known as project name on the UI
         :param pulumi.Input[bool] email_notification: Alerts will be sent when reaching 75% and 95% of the storage quota. This serves as a notification only and is not a
                blocker
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectGroupArgs']]]] groups: Project group. Element has one to one mapping with the [JFrog Project Groups
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ProjectGroupArgs', 'ProjectGroupArgsDict']]]] groups: Project group. Element has one to one mapping with the [JFrog Project Groups
                API](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateGroupinProject)
         :param pulumi.Input[str] key: The Project Key is added as a prefix to resources created within a Project. This field is mandatory and supports only 2 - 32 lowercase alphanumeric and hyphen characters. Must begin with a letter. For example: `us1a-test`.
         :param pulumi.Input[int] max_storage_in_gibibytes: Storage quota in GiB. Must be 1 or larger. Set to -1 for unlimited storage. This is translated to binary bytes for
                Artifactory API. So for a 1TB quota, this should be set to 1024 (vs 1000) which will translate to 1099511627776 bytes
                for the API.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectMemberArgs']]]] members: Member of the project. Element has one to one mapping with the [JFrog Project Users
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ProjectMemberArgs', 'ProjectMemberArgsDict']]]] members: Member of the project. Element has one to one mapping with the [JFrog Project Users
                API](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-UpdateUserinProject).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] repos: (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-               attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-               in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] repos: (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+               `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
                `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
                } ```
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ProjectRoleArgs']]]] roles: Project role. Element has one to one mapping with the [JFrog Project Roles
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ProjectRoleArgs', 'ProjectRoleArgsDict']]]] roles: Project role. Element has one to one mapping with the [JFrog Project Roles
                API](https://www.jfrog.com/confluence/display/JFROG/Artifactory+REST+API#ArtifactoryRESTAPI-AddaNewRole)
         :param pulumi.Input[bool] use_project_group_resource: When set to true, this resource will ignore the `group` attributes and allow users to be managed by `Group` resource
                instead. Default to `true`.
@@ -911,9 +910,8 @@ class Project(pulumi.CustomResource):
     @_utilities.deprecated("""Replaced by `Repository` resource. This should not be used in combination with `Repository` resource. Use `use_project_repository_resource` attribute to control which resource manages project repositories.""")
     def repos(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
-        (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-        attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-        in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+        `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
         `lifecycle.ignore_changes` in the `Project` resource to avoid state drift. ```hcl lifecycle { ignore_changes = [ repos ]
         } ```
         """

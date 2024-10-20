@@ -107,9 +107,8 @@ namespace Pulumi.JfrogProject
         public Output<ImmutableArray<Outputs.ProjectMember>> Members { get; private set; } = null!;
 
         /// <summary>
-        /// (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-        /// attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-        /// in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        /// (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+        /// `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
         /// `lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {
         /// ignore_changes = [ repos ] } ```
         /// </summary>
@@ -273,9 +272,8 @@ namespace Pulumi.JfrogProject
         private InputList<string>? _repos;
 
         /// <summary>
-        /// (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-        /// attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-        /// in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        /// (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+        /// `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
         /// `lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {
         /// ignore_changes = [ repos ] } ```
         /// </summary>
@@ -412,9 +410,8 @@ namespace Pulumi.JfrogProject
         private InputList<string>? _repos;
 
         /// <summary>
-        /// (Optional) List of existing repo keys to be assigned to the project. **Note** We *strongly* recommend using this
-        /// attribute to manage the list of repositories. If you wish to use the alternate method of setting `project_key` attribute
-        /// in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
+        /// (Optional) List of existing repo keys to be assigned to the project. If you wish to use the alternate method of setting
+        /// `project_key` attribute in each `artifactory_*_repository` resource in the `artifactory` provider, you will need to use
         /// `lifecycle.ignore_changes` in the `jfrog-project.Project` resource to avoid state drift. ```hcl lifecycle {
         /// ignore_changes = [ repos ] } ```
         /// </summary>

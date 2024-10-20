@@ -65,6 +65,13 @@ namespace Pulumi.JfrogProject
             set => _oidcProviderName.Set(value);
         }
 
+        private static readonly __Value<string?> _tfcCredentialTagName = new __Value<string?>(() => __config.Get("tfcCredentialTagName"));
+        public static string? TfcCredentialTagName
+        {
+            get => _tfcCredentialTagName.Get();
+            set => _tfcCredentialTagName.Set(value);
+        }
+
         private static readonly __Value<string?> _url = new __Value<string?>(() => __config.Get("url") ?? Utilities.GetEnv("PROJECT_URL", "JFROG_URL", "JFROG_PLATFORM_URL") ?? "http://localhost:8081");
         /// <summary>
         /// URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to

@@ -31,6 +31,10 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 		r = &Repository{}
 	case "jfrog-project:index/role:Role":
 		r = &Role{}
+	case "jfrog-project:index/shareRepository:ShareRepository":
+		r = &ShareRepository{}
+	case "jfrog-project:index/shareRepositoryWithAll:ShareRepositoryWithAll":
+		r = &ShareRepositoryWithAll{}
 	case "jfrog-project:index/user:User":
 		r = &User{}
 	default:
@@ -87,6 +91,16 @@ func init() {
 	pulumi.RegisterResourceModule(
 		"jfrog-project",
 		"index/role",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"jfrog-project",
+		"index/shareRepository",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"jfrog-project",
+		"index/shareRepositoryWithAll",
 		&module{version},
 	)
 	pulumi.RegisterResourceModule(

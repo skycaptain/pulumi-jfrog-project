@@ -35,6 +35,16 @@ export type Role = import("./role").Role;
 export const Role: typeof import("./role").Role = null as any;
 utilities.lazyLoad(exports, ["Role"], () => require("./role"));
 
+export { ShareRepositoryArgs, ShareRepositoryState } from "./shareRepository";
+export type ShareRepository = import("./shareRepository").ShareRepository;
+export const ShareRepository: typeof import("./shareRepository").ShareRepository = null as any;
+utilities.lazyLoad(exports, ["ShareRepository"], () => require("./shareRepository"));
+
+export { ShareRepositoryWithAllArgs, ShareRepositoryWithAllState } from "./shareRepositoryWithAll";
+export type ShareRepositoryWithAll = import("./shareRepositoryWithAll").ShareRepositoryWithAll;
+export const ShareRepositoryWithAll: typeof import("./shareRepositoryWithAll").ShareRepositoryWithAll = null as any;
+utilities.lazyLoad(exports, ["ShareRepositoryWithAll"], () => require("./shareRepositoryWithAll"));
+
 export { UserArgs, UserState } from "./user";
 export type User = import("./user").User;
 export const User: typeof import("./user").User = null as any;
@@ -64,6 +74,10 @@ const _module = {
                 return new Repository(name, <any>undefined, { urn })
             case "jfrog-project:index/role:Role":
                 return new Role(name, <any>undefined, { urn })
+            case "jfrog-project:index/shareRepository:ShareRepository":
+                return new ShareRepository(name, <any>undefined, { urn })
+            case "jfrog-project:index/shareRepositoryWithAll:ShareRepositoryWithAll":
+                return new ShareRepositoryWithAll(name, <any>undefined, { urn })
             case "jfrog-project:index/user:User":
                 return new User(name, <any>undefined, { urn })
             default:
@@ -76,6 +90,8 @@ pulumi.runtime.registerResourceModule("jfrog-project", "index/group", _module)
 pulumi.runtime.registerResourceModule("jfrog-project", "index/project", _module)
 pulumi.runtime.registerResourceModule("jfrog-project", "index/repository", _module)
 pulumi.runtime.registerResourceModule("jfrog-project", "index/role", _module)
+pulumi.runtime.registerResourceModule("jfrog-project", "index/shareRepository", _module)
+pulumi.runtime.registerResourceModule("jfrog-project", "index/shareRepositoryWithAll", _module)
 pulumi.runtime.registerResourceModule("jfrog-project", "index/user", _module)
 pulumi.runtime.registerResourcePackage("jfrog-project", {
     version: utilities.getVersion(),

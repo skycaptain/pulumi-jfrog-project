@@ -43,6 +43,14 @@ Object.defineProperty(exports, "oidcProviderName", {
     enumerable: true,
 });
 
+export declare const tfcCredentialTagName: string | undefined;
+Object.defineProperty(exports, "tfcCredentialTagName", {
+    get() {
+        return __config.get("tfcCredentialTagName");
+    },
+    enumerable: true,
+});
+
 /**
  * URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to
  * 'http://localhost:8081' if not set.

@@ -11,6 +11,8 @@ from .project import *
 from .provider import *
 from .repository import *
 from .role import *
+from .share_repository import *
+from .share_repository_with_all import *
 from .user import *
 from ._inputs import *
 from . import outputs
@@ -63,6 +65,22 @@ _utilities.register(
   "fqn": "pulumi_jfrog_project",
   "classes": {
    "jfrog-project:index/role:Role": "Role"
+  }
+ },
+ {
+  "pkg": "jfrog-project",
+  "mod": "index/shareRepository",
+  "fqn": "pulumi_jfrog_project",
+  "classes": {
+   "jfrog-project:index/shareRepository:ShareRepository": "ShareRepository"
+  }
+ },
+ {
+  "pkg": "jfrog-project",
+  "mod": "index/shareRepositoryWithAll",
+  "fqn": "pulumi_jfrog_project",
+  "classes": {
+   "jfrog-project:index/shareRepositoryWithAll:ShareRepositoryWithAll": "ShareRepositoryWithAll"
   }
  },
  {

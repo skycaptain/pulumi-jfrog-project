@@ -26,6 +26,8 @@ func GetAccessToken(ctx *pulumi.Context) string {
 }
 
 // Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.
+//
+// Deprecated: Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider.
 func GetCheckLicense(ctx *pulumi.Context) bool {
 	v, err := config.TryBool(ctx, "jfrog-project:checkLicense")
 	if err == nil {
@@ -41,6 +43,9 @@ func GetCheckLicense(ctx *pulumi.Context) bool {
 // more details.
 func GetOidcProviderName(ctx *pulumi.Context) string {
 	return config.Get(ctx, "jfrog-project:oidcProviderName")
+}
+func GetTfcCredentialTagName(ctx *pulumi.Context) string {
+	return config.Get(ctx, "jfrog-project:tfcCredentialTagName")
 }
 
 // URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to

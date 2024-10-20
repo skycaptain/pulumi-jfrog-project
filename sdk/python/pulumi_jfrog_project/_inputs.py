@@ -4,17 +4,45 @@
 
 import copy
 import warnings
+import sys
 import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
+if sys.version_info >= (3, 11):
+    from typing import NotRequired, TypedDict, TypeAlias
+else:
+    from typing_extensions import NotRequired, TypedDict, TypeAlias
 from . import _utilities
 
 __all__ = [
     'ProjectAdminPrivilegeArgs',
+    'ProjectAdminPrivilegeArgsDict',
     'ProjectGroupArgs',
+    'ProjectGroupArgsDict',
     'ProjectMemberArgs',
+    'ProjectMemberArgsDict',
     'ProjectRoleArgs',
+    'ProjectRoleArgsDict',
 ]
+
+MYPY = False
+
+if not MYPY:
+    class ProjectAdminPrivilegeArgsDict(TypedDict):
+        index_resources: pulumi.Input[bool]
+        """
+        Enables a project admin to define the resources to be indexed by Xray
+        """
+        manage_members: pulumi.Input[bool]
+        """
+        Allows the Project Admin to manage Platform users/groups as project members with different roles.
+        """
+        manage_resources: pulumi.Input[bool]
+        """
+        Allows the Project Admin to manage resources - repositories, builds and Pipelines resources on the project level.
+        """
+elif False:
+    ProjectAdminPrivilegeArgsDict: TypeAlias = Mapping[str, Any]
 
 @pulumi.input_type
 class ProjectAdminPrivilegeArgs:
@@ -68,6 +96,19 @@ class ProjectAdminPrivilegeArgs:
         pulumi.set(self, "manage_resources", value)
 
 
+if not MYPY:
+    class ProjectGroupArgsDict(TypedDict):
+        name: pulumi.Input[str]
+        """
+        Must be existing Artifactory group
+        """
+        roles: pulumi.Input[Sequence[pulumi.Input[str]]]
+        """
+        List of pre-defined Project or custom roles
+        """
+elif False:
+    ProjectGroupArgsDict: TypeAlias = Mapping[str, Any]
+
 @pulumi.input_type
 class ProjectGroupArgs:
     def __init__(__self__, *,
@@ -105,6 +146,19 @@ class ProjectGroupArgs:
         pulumi.set(self, "roles", value)
 
 
+if not MYPY:
+    class ProjectMemberArgsDict(TypedDict):
+        name: pulumi.Input[str]
+        """
+        Must be existing Artifactory user
+        """
+        roles: pulumi.Input[Sequence[pulumi.Input[str]]]
+        """
+        List of pre-defined Project or custom roles
+        """
+elif False:
+    ProjectMemberArgsDict: TypeAlias = Mapping[str, Any]
+
 @pulumi.input_type
 class ProjectMemberArgs:
     def __init__(__self__, *,
@@ -141,6 +195,25 @@ class ProjectMemberArgs:
     def roles(self, value: pulumi.Input[Sequence[pulumi.Input[str]]]):
         pulumi.set(self, "roles", value)
 
+
+if not MYPY:
+    class ProjectRoleArgsDict(TypedDict):
+        actions: pulumi.Input[Sequence[pulumi.Input[str]]]
+        """
+        List of pre-defined actions (READ*REPOSITORY, ANNOTATE*REPOSITORY, DEPLOY*CACHE*REPOSITORY, DELETE*OVERWRITE*REPOSITORY, MANAGE*XRAY*MD*REPOSITORY, READ*RELEASE*BUNDLE, ANNOTATE*RELEASE*BUNDLE, CREATE*RELEASE*BUNDLE, DISTRIBUTE*RELEASE*BUNDLE, DELETE*RELEASE*BUNDLE, MANAGE*XRAY*MD*RELEASE*BUNDLE, READ*BUILD, ANNOTATE*BUILD, DEPLOY*BUILD, DELETE*BUILD, MANAGE*XRAY*MD*BUILD, READ*SOURCES*PIPELINE, TRIGGER*PIPELINE, READ*INTEGRATIONS*PIPELINE, READ*POOLS*PIPELINE, MANAGE*INTEGRATIONS*PIPELINE, MANAGE*SOURCES*PIPELINE, MANAGE*POOLS*PIPELINE, TRIGGER*SECURITY, ISSUES*SECURITY, LICENCES*SECURITY, REPORTS*SECURITY, WATCHES*SECURITY, POLICIES*SECURITY, RULES*SECURITY, MANAGE*MEMBERS, MANAGE*RESOURCES)
+        """
+        environments: pulumi.Input[Sequence[pulumi.Input[str]]]
+        """
+        A repository can be available in different environments. Members with roles defined in the set environment will have access to the repository. List of pre-defined environments (DEV, PROD)
+        """
+        name: pulumi.Input[str]
+        description: NotRequired[pulumi.Input[str]]
+        type: NotRequired[pulumi.Input[str]]
+        """
+        Type of role. Only "CUSTOM" is supported
+        """
+elif False:
+    ProjectRoleArgsDict: TypeAlias = Mapping[str, Any]
 
 @pulumi.input_type
 class ProjectRoleArgs:

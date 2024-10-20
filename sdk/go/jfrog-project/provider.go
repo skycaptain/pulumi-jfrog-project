@@ -24,7 +24,8 @@ type Provider struct {
 	// OIDC provider name. See [Configure an OIDC
 	// Integration](https://jfrog.com/help/r/jfrog-platform-administration-documentation/configure-an-oidc-integration) for
 	// more details.
-	OidcProviderName pulumi.StringPtrOutput `pulumi:"oidcProviderName"`
+	OidcProviderName     pulumi.StringPtrOutput `pulumi:"oidcProviderName"`
+	TfcCredentialTagName pulumi.StringPtrOutput `pulumi:"tfcCredentialTagName"`
 	// URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to
 	// 'http://localhost:8081' if not set.
 	Url pulumi.StringPtrOutput `pulumi:"url"`
@@ -71,11 +72,14 @@ type providerArgs struct {
 	// the `PROJECT_ACCESS_TOKEN` or `JFROG_ACCESS_TOKEN` environment variable. Defauult to empty string if not set.
 	AccessToken *string `pulumi:"accessToken"`
 	// Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.
+	//
+	// Deprecated: Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider.
 	CheckLicense *bool `pulumi:"checkLicense"`
 	// OIDC provider name. See [Configure an OIDC
 	// Integration](https://jfrog.com/help/r/jfrog-platform-administration-documentation/configure-an-oidc-integration) for
 	// more details.
-	OidcProviderName *string `pulumi:"oidcProviderName"`
+	OidcProviderName     *string `pulumi:"oidcProviderName"`
+	TfcCredentialTagName *string `pulumi:"tfcCredentialTagName"`
 	// URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to
 	// 'http://localhost:8081' if not set.
 	Url *string `pulumi:"url"`
@@ -87,11 +91,14 @@ type ProviderArgs struct {
 	// the `PROJECT_ACCESS_TOKEN` or `JFROG_ACCESS_TOKEN` environment variable. Defauult to empty string if not set.
 	AccessToken pulumi.StringPtrInput
 	// Toggle for pre-flight checking of Artifactory Enterprise license. Default to `true`.
+	//
+	// Deprecated: Remove this attribute from your provider configuration as it is no longer used and the attribute will be removed in the next major version of the provider.
 	CheckLicense pulumi.BoolPtrInput
 	// OIDC provider name. See [Configure an OIDC
 	// Integration](https://jfrog.com/help/r/jfrog-platform-administration-documentation/configure-an-oidc-integration) for
 	// more details.
-	OidcProviderName pulumi.StringPtrInput
+	OidcProviderName     pulumi.StringPtrInput
+	TfcCredentialTagName pulumi.StringPtrInput
 	// URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to
 	// 'http://localhost:8081' if not set.
 	Url pulumi.StringPtrInput
@@ -145,6 +152,10 @@ func (o ProviderOutput) AccessToken() pulumi.StringPtrOutput {
 // more details.
 func (o ProviderOutput) OidcProviderName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Provider) pulumi.StringPtrOutput { return v.OidcProviderName }).(pulumi.StringPtrOutput)
+}
+
+func (o ProviderOutput) TfcCredentialTagName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Provider) pulumi.StringPtrOutput { return v.TfcCredentialTagName }).(pulumi.StringPtrOutput)
 }
 
 // URL of Artifactory. This can also be sourced from the `PROJECT_URL` or `JFROG_URL` environment variable. Default to
